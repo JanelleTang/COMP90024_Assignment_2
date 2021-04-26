@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cloud Computing Project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+	<script src="https://d3js.org/d3.v6.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<!-- google maps api reference -->
+	<script src="//maps.google.com/maps/api/js?key=AIzaSyAEzPa6JQe9jpdO1XY3oocY8a3GtMtvdv0"></script>
+	<script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
+	<style>
+		.hidden {
+			display : none;
+		}
+	</style>
+</head>
+
+<body>
+
+
+	<nav id="navBar" class="navbar navbar-expand-md navbar-light bg-light">
+		<a class="navbar-brand" href="#">Cloud Computing Project</a>
+		<button id="navbarButton" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<select id="layerSelect" class="select" multiple>
+						<option value="tweets">Tweets</option>
+						<option value="parks">Parks</option>
+						<option value="distance">Average Sentiment</option>
+					</select>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<div id="map" class = "container-fluid" style="width: 100%; height: 600px;"></div>
+			</div>
+		</div>
+	</div>
+	
+
+					
+	<script>		
+	// size map to window dimensions
+	setMapHeight();
+	// resize map if window is changed or toolbar is shown or hidden
+	$( window ).resize(setMapHeight);
+	$('.navbar-collapse').on('shown.bs.collapse',setMapHeight);
+	$('.navbar-collapse').on('hidden.bs.collapse',setMapHeight);
+	
+	$("#layerSelect").on("change",function(d) {
+		var values = $("#layerSelect").val();
+		d3.selectAll(".overlay").classed("hidden",true);
+		values.forEach(function(d) {
+			d3.select("#"+d).classed("hidden",false);
+		});
+	});
+	
+	// initialize the google map object
+	var map = new google.maps.Map(d3.select("#map").node(), {
+	  zoom: 12,
+	  // center map on Melbourn
+	  center: new google.maps.LatLng(-37.79569742467872, 144.94660957648935),
+	  mapTypeId: google.maps.MapTypeId.TERRAIN
+	});
+	// load all necessary data
+	var dataLoad = Promise.all([d3.json("geoJSON/parksShape.json"),d3.json("json/sampleTweets.json")])
+		.then(function(files) {
+		parksData = files[0];
+		tweets = files[1];
+		var max_x, max_y, min_x, min_y;
+		var bounds = new google.maps.LatLngBounds();
+		parksData.features.forEach(function(d) {
+			max_x = d3.max([max_x,d3.max(d.geometry.coordinates[0][0], function(d) {return +d[0];})]);
+			min_x = d3.min([min_x,d3.min(d.geometry.coordinates[0][0], function(d) {return +d[0];})]);
+			max_y = d3.max([max_y,d3.max(d.geometry.coordinates[0][0], function(d) {return +d[1];})]);
+			min_y = d3.min([min_y,d3.max(d.geometry.coordinates[0][0], function(d) {return +d[1];})]);
+		});
+		bounds.extend(new google.maps.LatLng(max_y,min_x));
+		bounds.extend(new google.maps.LatLng(min_y, max_x));
+		
+		// set the current bound of the google map
+		map.fitBounds(bounds);
+		var overlay = buildOverlay("parks",bounds,parksData);
+		var overlay2 = buildOverlay("distance",bounds,tweets);
+		var overlay3 = buildOverlay("tweets",bounds,tweets);
+		
+		
+		// Bind our overlay to the map
+		overlay.setMap(map);
+		overlay2.setMap(map);
+		overlay3.setMap(map);
+	});
+	
+	var buildOverlay = function(type,bounds,data) {
+		var overlay = new google.maps.OverlayView();
+		overlay.onAdd = function() {
+			var layer = d3.select(this.getPanes().overlayMouseTarget)
+				.append("svg")
+				.attr("id",type)
+				.attr("class",type + " hidden overlay");
+			overlay.draw = function() {
+				var projection = this.getProjection(),
+				sw = projection.fromLatLngToDivPixel(bounds.getSouthWest()),
+				ne = projection.fromLatLngToDivPixel(bounds.getNorthEast());
+				
+				var markerOverlay = this;
+				var overlayProjection = markerOverlay.getProjection();
+				
+					
+				var googleMapProjection = d3.geoTransform({
+						point: function(x,y) {
+							var googleCoordinates = new google.maps.LatLng(y, x);
+							var pixelCoordinates = overlayProjection.fromLatLngToDivPixel(googleCoordinates);
+							this.stream.point(pixelCoordinates.x-sw.x,pixelCoordinates.y-ne.y)
+						}
+					});
+				
+				var path = d3.geoPath().projection(googleMapProjection);
+
+				if(type=="parks"){
+				
+					d3.select("."+type)
+						.attr("width",(ne.x-sw.x) + 'px')
+						.attr('height',(sw.y-ne.y) + "px")
+						.style("position","absolute")
+						.style("left",sw.x+"px")
+						.style("top",ne.y+"px");
+					layer.selectAll("path")
+						.data(data.features)
+						.each(transform)
+						.enter()
+						.append("path")
+						
+							.attr("class","park")
+							.each(transform)
+							.style("stroke","green")
+							.style("fill","green")
+							.style("fill-opacity",.2)
+							;
+				} else if (type=="distance") {
+					var hexData = [];
+					;
+					data.forEach(function(d) {
+						var googleCoordinates = new google.maps.LatLng(+d.lattitude, +d.longitude);
+						var pixelCoordinates = overlayProjection.fromLatLngToDivPixel(googleCoordinates);
+						d.x = pixelCoordinates.x-sw.x;
+						d.y = pixelCoordinates.y-ne.y;
+						hexData.push([d.x,d.y,d.sentiment]);
+					});
+					d3.select("."+type)
+						.attr("width",(ne.x-sw.x) + 'px')
+						.attr('height',(sw.y-ne.y) + "px")
+						.style("position","absolute")
+						.style("left",sw.x+"px")
+						.style("top",ne.y+"px");
+					hexbins = d3.hexbin()
+						.extent([[sw.x,ne.y],[(ne.x-sw.x),(sw.y-ne.y)]])
+						.radius(20);
+					layer
+						 .selectAll("path")
+						 .data(hexbins(hexData))
+						 .join("path")
+						 .attr("d",hexbins.hexagon())
+						 .attr("transform",function(d) {
+							return "translate("+d.x+","+d.y+")";
+						 })
+						 .style("stroke","grey")
+						 .style("fill",function(d) {console.log(d); return d3.interpolateRgb("red","green")(
+								d3.mean(d,function(e) {console.log(e); return e[2]=="positive"?1:0;})
+							);})
+						 .style("fill-opacity",0.2);
+						 
+				} else if (type=="tweets") {
+				
+					d3.select("."+type)
+						.attr("width",(ne.x-sw.x) + 'px')
+						.attr('height',(sw.y-ne.y) + "px")
+						.style("position","absolute")
+						.style("left",sw.x+"px")
+						.style("top",ne.y+"px");
+					layer.selectAll(".tweet")
+						.data(data)
+						.each(transform2)
+						.enter()
+						.append("circle")
+						
+							.attr("class","tweet")
+							.attr("r",5)
+							.each(transform2)
+							.style("stroke","black")
+							.style("fill",function(d) {return d.sentiment=="positive"?"green":"red";})
+							.style("opacity",.3)
+							;
+				}
+				var check = d3.polygonContains;
+				function transform(d) {
+
+					return d3.select(this).attr("d",path);
+				}
+				function transform2(d) {
+					var googleCoordinates = new google.maps.LatLng(+d.lattitude, +d.longitude);
+					var pixelCoordinates = overlayProjection.fromLatLngToDivPixel(googleCoordinates);
+					return d3.select(this)
+						.attr("cx",pixelCoordinates.x-sw.x)
+						.attr("cy",pixelCoordinates.y-ne.y);
+				}
+			}
+		}
+		
+		return overlay;
+	}
+	
+
+
+	function setMapHeight() {
+		$("#map").height((document.documentElement.clientHeight-$("#navBar").height())*.95);
+	}
+	</script>
+</body>
+</html>
+

@@ -1,0 +1,21 @@
+[
+{"lattitude" : -37.76880334113445, "longitude" : 144.95758730652534, "sentiment" : "positive"},
+{"lattitude" : -37.76090135288797, "longitude" : 144.95813825608894, "sentiment" : "positive"},
+{"lattitude" : -37.77225630711817,  "longitude" : 144.9689604796596, "sentiment" : "positive"},
+{"lattitude" : -37.760776905375764,  "longitude" : 144.96061752912513, "sentiment" : "positive"},
+{"lattitude" : -37.768118950352026,  "longitude" : 144.94928370953113, "sentiment" : "positive"},
+{"lattitude" : -37.75912795607314,  "longitude" : 144.96738633804932, "sentiment" : "positive"},
+{"lattitude" : -37.76619017861503,  "longitude" : 144.96097171098742, "sentiment" : "positive"},
+{"lattitude" : -37.773656112257186,  "longitude" : 144.97006237878676, "sentiment" : "positive"},
+{"lattitude" : -37.7683678204603,  "longitude" : 144.9577053671461, "sentiment" : "positive"},
+{"lattitude" : -37.75838124995821,  "longitude" : 144.96506447917417, "sentiment" : "positive"},
+{"lattitude" : -37.76855447249188,  "longitude" : 144.95947627645768, "sentiment" : "positive"},
+{"lattitude" : -37.75732340339312, "longitude" : 144.9533371241776, "sentiment" : "negative"},
+{"lattitude" : -37.76864779833099,  "longitude" : 144.96443482253002, "sentiment" : "negative"},
+{"lattitude" : -37.75841236286349,  "longitude" : 144.95148750778552, "sentiment" : "negative"},
+{"lattitude" : -37.772567377217094,  "longitude" : 144.94983465909473, "sentiment" : "negative"},
+{"lattitude" : -37.7587234911965, "longitude" : 144.957075710502, "sentiment" : "negative"},
+{"lattitude" : -37.772660697991576,  "longitude" : 144.96069623620565, "sentiment" : "negative"},
+{"lattitude" : -37.760808017273455,  "longitude" : 144.95715441758253, "sentiment" : "negative"},
+{"lattitude" : -37.77060761374503,  "longitude" : 144.94900823474933, "sentiment" : "negative"}
+]
