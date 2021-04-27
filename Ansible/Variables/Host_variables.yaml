@@ -1,0 +1,51 @@
+# COMP90024 Project - Team 37
+
+---
+-hosts: localhost
+# Variables
+availability_zone: melbourne-qh2-uom
+instance_image: 916cad7a-c545-48b2-b36c-d509ee63b3ce #NeCTAR Ubuntu 18.04 LTS (Bionic) amd64 (with Docker)
+instance_flavor: uom.mse.2c9g
+instance_network: qh2-uom-internal
+instance_key_name: dev-testing
+ansible_python_interpreter: /Library/Frameworks/Python.framework/Versions/3.7/bin/python3
+
+# For Volume Variables
+volumes:
+  - vol_name: Database-vol
+    vol_size: 50
+  - vol_name: Backend-vol
+    vol_size: 30
+  - vol_name: Frontend-vol
+    vol_size: 10
+#
+# For Security group Variables
+security_groups:
+ - name: main_ssh
+   description: "Main security group for SSH access"
+   protocol: tcp
+   port_range_min: 22
+   port_range_max: 22
+   remote_ip_prefix: 0.0.0.0/0
+ - name: main_http
+   description: "Main security group for HTTP"
+   protocol: tcp
+   port_range_min: 80
+   port_range_max: 80
+   remote_ip_prefix: 0.0.0.0/0
+ - name: main_https
+   description: "Main security group for HTTPS"
+   protocol: tcp
+   port_range_min: 443
+   port_range_max: 443
+   remote_ip_prefix: 0.0.0.0/0
+
+instances:
+- instance_name: Database
+  instance_vol_name: Database-vol
+- instance_name: Backend
+  instance_vol_name: Backend-vol
+- instance_name: Frontend
+  instance_vol_name: Frontend-vol
+
+  
