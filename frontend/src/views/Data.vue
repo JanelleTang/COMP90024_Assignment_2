@@ -28,7 +28,7 @@
 
 <script>
     import Navbar from '../components/Navbar'
-    import { getAPI } from '../axios'
+    import { getAPI } from '../config/axios'
     export default{
         name:'Data',
         data () {
