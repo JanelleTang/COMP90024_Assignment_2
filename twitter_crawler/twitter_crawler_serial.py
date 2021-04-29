@@ -45,12 +45,6 @@ def readCityCoords():
 def setUser(keys_tokens, user_no):
     total_users = len(keys_tokens)
     user = user_no % total_users
-
-    #print('user_no: ' + str(user_no))
-    #print('total_users: ' + str(total_users))
-    #print('user: ' + str(user))
-    #print()
-
     consumer_key = keys_tokens[user][1]
     consumer_secret= keys_tokens[user][2]
     access_token = keys_tokens[user][3]
@@ -60,19 +54,20 @@ def setUser(keys_tokens, user_no):
 
 
 def createGridPoints(city, search_radius, cityCoordsDict):
+    interval = 0.05 #approx 5km
     oglat = cityCoordsDict[city][0]
     oglong = cityCoordsDict[city][1]
     templong = copy.deepcopy(oglong)
     latlong_list = []
 
-    for i in range(1,7):
-        for j in range(1,7):
-            templong += 0.1
+    for i in range(1,16):
+        for j in range(1,16):
+            templong += interval
             tempcoord = str(oglat) +',' + str(templong) + ',' + str(search_radius) + 'km'
             latlong_list.append(tempcoord)
-        oglat -=0.1
+        oglat -=interval
         templong = copy.deepcopy(oglong)
-            
+    
     return latlong_list
 
 def checkWait(student_no, keys_tokens):
@@ -82,7 +77,7 @@ def checkWait(student_no, keys_tokens):
 
 def harvestTweets(city, cityCoordsDict, keys_tokens, tweet_count, query, language):
     tweet_df = pd.DataFrame(columns=['tweet id','user id','text','lang','user location','user geo_enabled','coordinates','created_at','latlong','search_radius'])
-    search_radius = 8
+    search_radius = 5 #km
     grid_points = createGridPoints(city, search_radius, cityCoordsDict)
     student_no = 0
     all_tweet_data = []
@@ -93,12 +88,17 @@ def harvestTweets(city, cityCoordsDict, keys_tokens, tweet_count, query, languag
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         api = tweepy.API(auth, wait_on_rate_limit=True)
         tweet_data = searchTweets(query, tweet_count, language, point, api)
+        
         if tweet_data: #if tweet data found append it
             all_tweet_data.append(tweet_data)
         student_no += 1
     
-    tweet_df = tweet_df.append(all_tweet_data,ignore_index=True)
+    for item in all_tweet_data:
+        tweet_df = tweet_df.append(item,ignore_index=True)
+        
     tweet_df = tweet_df.drop_duplicates(subset='tweet id')
+    tweet_df.reset_index(inplace=True, drop=True)
+
     print(tweet_df.to_string())
 
 
@@ -106,7 +106,7 @@ def harvestTweets(city, cityCoordsDict, keys_tokens, tweet_count, query, languag
 def main():
     cityCoordsDict, cityList = readCityCoords()
     keys_tokens = readKeys()
-    tweet_count = 10
+    tweet_count = 200
     query = ('climate change OR climatechange OR #climatechange OR Climate Change OR #ClimateChange OR Climate change')
     language = 'en'
 
@@ -115,7 +115,6 @@ def main():
         break #DELETE THIS IS JUST FOR TESTING *******************
 
     
-
 main()
 
 
