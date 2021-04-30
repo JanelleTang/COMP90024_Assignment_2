@@ -1,0 +1,34 @@
+# COMP90024 Project 2 - Team 37
+# Install dependencies on the host
+
+- name: Install pip
+  become: yes
+  apt:
+    name: ['python-pip']
+    state: latest
+    update_cache: yes
+  when: ansible_distribution == "Ubuntu"
+
+- name: Update pip
+  become: yes
+  pip:
+    name: ['pip']
+    state: latest
+
+- name: Install pip3
+  become: yes
+  apt:
+    name: ['python3-pip']
+    state: latest
+    update_cache: yes
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install openstacksdk
+  become: yes
+  pip:
+    name: ['openstacksdk']
+    state: latest
+
+#- name: Change pip3 to pip.
+#  become: yes
+#  command: update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
