@@ -1,4 +1,4 @@
-# vue3
+# j-frontend
 
 ## Project setup
 ```
