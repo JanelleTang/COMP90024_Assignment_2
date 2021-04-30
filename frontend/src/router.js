@@ -21,6 +21,6 @@ export default new VueRouter({
         path: '/data',
         name: 'Data',
         component: Data,
-        }
+        },
     ]
 })

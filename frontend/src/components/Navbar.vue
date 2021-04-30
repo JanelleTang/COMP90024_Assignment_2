@@ -14,7 +14,7 @@
                     <a class="nav-link" href="/data/">Data vis #1</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Data vis #2</a>
+                    <a class="nav-link" href="/map/">Data vis #2</a>
                 </li>
                 </ul>
             </div>

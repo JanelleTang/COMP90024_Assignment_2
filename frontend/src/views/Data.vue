@@ -2,10 +2,11 @@
   <div class="data">
     <Navbar></Navbar> 
     <h3 class="display-1">Data stuff</h3>
+      <Map></Map>
       <div class="album py-5 bg-light">
           <div class="container">
             <div class="row">
-              <div v-for="testDataPoint in APIData" :key="testDataPoint.id" class="col-md-4">
+              <!--<div v-for="testDataPoint in APIData" :key="testDataPoint.id" class="col-md-4">
                 <div class="card mb-4 box-shadow">
                   <img class="card-img-top" src="https://via.placeholder.com/150x100" alt="Card image cap">
                   <div class="card-body">
@@ -19,7 +20,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>-->
             </div>
           </div>
       </div>
@@ -27,8 +28,9 @@
 </template>
 
 <script>
-    import Navbar from '../components/Navbar'
-    import { getAPI } from '../config/axios'
+    import Navbar from '../components/Navbar.vue'
+    import Map from '../components/Map.vue'
+    import { getAPI } from '../axios'
     export default{
         name:'Data',
         data () {
@@ -37,10 +39,10 @@
             }
         },
         components:{
-            Navbar
+            Navbar, Map
         },
         created () {
-            getAPI.get('/testDataPoint/',)
+            getAPI.get('/api/',)
             .then(response => {
             console.log('Post API has recieved data')
             this.APIData = response.data
@@ -51,4 +53,4 @@
         }
 
     }
-</script> 
+</script> ç
