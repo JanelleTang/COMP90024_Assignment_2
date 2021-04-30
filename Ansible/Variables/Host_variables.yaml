@@ -10,14 +10,16 @@ instance_network: qh2-uom-internal
 instance_key_name: dev-testing
 ansible_python_interpreter: /Library/Frameworks/Python.framework/Versions/3.7/bin/python3
 
-# For Volume Variables
+# # For Volume Variables
 volumes:
-  - vol_name: Database-vol
-    vol_size: 50
-  - vol_name: Backend-vol
-    vol_size: 30
-  - vol_name: Frontend-vol
-    vol_size: 10
+  - vol_name: instance1-vol
+    vol_size: 160
+  - vol_name: instance2-vol
+    vol_size: 160
+  - vol_name: instance3-vol
+    vol_size: 160
+  - vol_name: instance4-vol
+    vol_size: 20
 #
 # For Security group Variables
 security_groups:
@@ -41,11 +43,13 @@ security_groups:
    remote_ip_prefix: 0.0.0.0/0
 
 instances:
-- instance_name: Database
-  instance_vol_name: Database-vol
-- instance_name: Backend
-  instance_vol_name: Backend-vol
-- instance_name: Frontend
-  instance_vol_name: Frontend-vol
+- instance_name: instance1
+  instance_vol_name: instance1-vol
+- instance_name: instance2
+  instance_vol_name: instance2-vol
+- instance_name: instance3
+  instance_vol_name: instance3-vol
+- instance_name: instance4
+  instance_vol_name: instance4-vol
 
   
