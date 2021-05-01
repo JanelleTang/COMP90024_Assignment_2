@@ -31,7 +31,6 @@ auth.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(auth)
 
-tweet_harvest = []
 
 class MyStreamListener(tweepy.StreamListener):
 
@@ -39,6 +38,11 @@ class MyStreamListener(tweepy.StreamListener):
         print(status.text)
 
 class StdOutListener(tweepy.StreamListener):
+    def __init__(self,api=None,batch_size=10):
+        super().__init__(api)
+        ## initialize with a list to store batches of tweets in
+        self.tweets = []
+        self.batch_size = batch_size
     def on_data(self,data):
         try:
             res = json.loads(data)
@@ -63,9 +67,11 @@ class StdOutListener(tweepy.StreamListener):
                     print(location.latitude)
                     print(location.longitude)
                     print()
-
-            tweet_harvest.append(temp_dict)
-            return True
+            self.tweets.append(temp_dict)
+            if len(self.tweets) <= self.batch_size:
+                return True
+            ## if specified batch has been reached, end stream to call methods on data and insert to couchdb
+            return False
         except KeyboardInterrupt:
             print('Interrupted')
             try:
@@ -78,7 +84,13 @@ class StdOutListener(tweepy.StreamListener):
         if status == 420:
             print(status)
             sleep(1200) #sleeps for 20min
-            return True
+            return False
+
+    def clear_tweets(self):
+        self.tweets = []
+
+    def return_tweets(self):
+        return self.tweets
         
 if __name__=='__main__':
     l = StdOutListener()
@@ -97,4 +109,9 @@ if __name__=='__main__':
 
     #stream.filter(track=trck_list,languages=['en','english']) #The track parameter is an array of search terms to stream. not case sensitive. 
     #maximum arguments to track is 400
-    stream.filter(track=arguments,languages=['en','english']) #locations= [-11.294361787275554, 112.35957302833245, -44.14091475638197, 154.7667953666953]) #The track parameter is an array of search terms to stream. not case sensitive. 
+    while True:
+        input("hit enter") ## remove on final version, this is just to demonstrate starting and stopping of streaming
+        stream.filter(track=arguments,languages=['en','english']) #locations= [-11.294361787275554, 112.35957302833245, -44.14091475638197, 154.7667953666953]) #The track parameter is an array of search terms to stream. not case sensitive. 
+        print(l.return_tweets())
+        l.clear_tweets()
+        ## perform learning methods/inserts to couchdb here
