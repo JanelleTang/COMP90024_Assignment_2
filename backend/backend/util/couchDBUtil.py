@@ -4,7 +4,7 @@ https://couchdb-python.readthedocs.io/en/latest/client.html
 '''
 import couchdb
 import logging
-from ../config/couchDBConfig import CouchDBConfig
+from backend.config.couchDBConfig import CouchDBConfig
 logger = logging.getLogger("django.info")
 
 class CouchDBDriver:
@@ -38,7 +38,7 @@ class CouchDBLoadBalancer:
 
     balance_factor = 0
 
-    def __init__(self, CouchDBConfig):
+    def __init__(self, CouchDBConfig=CouchDBConfig):
         self.servers = []
         for domain in CouchDBConfig.domains:
             self.servers.append(CouchDBDriver(domian=domain))
