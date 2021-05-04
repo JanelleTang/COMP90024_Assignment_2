@@ -1,0 +1,36 @@
+# COMP90024 Project - Team 37
+
+- name: Create Instances
+  os_server:
+    name: '{{ item.instance_name }}'
+    image: '{{ instance_image }}'
+    key_name: '{{ instance_key_name }}'
+    flavor: '{{ instance_flavor }}'
+    availability_zone: '{{ availability_zone }}'
+    security_groups: '{{ sg_names }}'
+    volumes: '{{ item.instance_vol_name }}'
+    network: '{{ instance_network }}'
+    auto_floating_ip: yes
+    wait: yes
+    timeout: 600
+    state: present
+  loop: '{{ instances }}'
+  register: os_instance
+
+# debugging for instance creation
+- debug:
+    msg: "Instance: {{ item.openstack.name }} IP: {{ item.openstack.public_v4 }}"
+  loop: '{{ os_instance.results }}'
+  when: item.openstack is defined
+
+- name: "add IP addresses of instances into facts"
+  set_fact:
+    ip_addresses: "{{ ip_addresses|default([]) + [ {'instanceName': item.item.name, 'ip': item.openstack.public_v4} ] }}"
+  when: item.openstack is defined
+  loop: '{{ os_instance.results }}'
+
+- name: set ip addresses into inventory.ini
+  lineinfile:
+    line: "[{{item.instanceName}}]\n{{item.ip}}\n"
+    dest: "{{project_directory}}/COMP90024_ASSIGNMENT_2/Ansible1/inventory/inventory.ini"
+  loop: "{{ip_addresses}}"
