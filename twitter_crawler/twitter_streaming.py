@@ -6,14 +6,15 @@ import geopy
 import sys
 import os
 from shapely.geometry import Point, Polygon
-
+from geopy.exc import GeocoderTimedOut
+from datetime import datetime
+import re
+from geopy.extra.rate_limiter import RateLimiter
 
 consumer_key='gqeaPMcHDSiBP2DDrKIj14oJ4'
 consumer_secret='EEcwBh5pUPXbtMzHOzIbowIa3jwlFB929UTAK7xBVvyyUjNAM3'
 access_token='1384728716828282886-wYaaBcTYOlOYFoZeMHFSt6A5NCyDb7'
 access_token_secret='pVBHMmbRd8iV8Njj8Tuo52wsc8sGZKsPEU2vaRwEqgZ0I'
-
-tweet_harvest = []
 
 def processTweets(listTweets):
     processed_tweets = []
@@ -22,7 +23,36 @@ def processTweets(listTweets):
     for tweet in listTweets:
         if tweet['user location']:
             locator = geopy.Nominatim(user_agent='myGeocoder')
-            location = locator.geocode(tweet['user location'], viewbox= [(-10.5, 110.99), (-44.43, 157.87)])  
+            #if tweet['user location'].lower() == 'sydney' or tweet['user location'] == 'Brisbane' or tweet['user location'] == 'Sydney, Australia' or tweet['user location'] == 'Brisbane, Australia' or tweet['user location'] == 'Australia, Sydney' or tweet['user location'] == 'Australia, Brisbane' or tweet['user location'] == 'Brisbane, Queensland' or tweet['user location'] == 'Sydney, New South Wales':
+                #processed_tweets.append(tweet)
+                #continue
+            cities = ['sydney', 'melbourne', 'brisbane']
+
+            found = False
+            for city in cities:
+                if re.search(city, tweet['user location'].lower()):
+                    processed_tweets.append(tweet)
+                    found = True
+                    break
+
+            if found:
+                continue
+            if tweet['user location'].lower() == 'australia' or tweet['user location'].lower() == 'aus':
+                continue
+            try:
+                location = locator.geocode(tweet['user location'], viewbox= [(-10.5, 110.99), (-44.43, 157.87)]) 
+            except GeocoderTimedOut as e:
+                print("Geocoder TimedOut... sleeping 5")
+                sleep(5)
+                continue
+            except GeocoderUnavailable as e:
+                print("Geocpder Unavailable.... sleeping 5")
+                sleep(5)
+ 
+            except Exception as e:
+                print('caught geocode error')
+                print(e)
+                continue
             if not location:
                 continue
             point = Point(location.latitude, location.longitude)
@@ -50,7 +80,11 @@ def sendTweets(tweets_for_submission):
             with open('tweetDump.txt', 'w') as outfile:
                 json.dump(tweets_for_submission, outfile)
                 outfile.close()
-        print("Australia tweets appended")
+        now = datetime.now()
+
+        print("Australia tweets appended at: " + str(now))
+    else:
+        print('no aus tweets appended')
 
 class MyStreamListener(tweepy.StreamListener):
 
@@ -117,7 +151,7 @@ if __name__=='__main__':
     auth.set_access_token(access_token, access_token_secret)
 
     stream = tweepy.Stream(auth, l, )
-    arguments = ['climate change', 'climatechange', 'global warming']
+    arguments = ['climate change', 'climatechange', 'global warming', 'cimateaction', 'climate action']
 
     while True:
         stream.filter(track=arguments,languages=['en','english'])  
@@ -125,5 +159,6 @@ if __name__=='__main__':
         sendTweets(processedTweets)
         l.clear_tweets()
 
-        print('FINISHED A LOOP OF STREAM')
+        #now = datetime.now()
+        #print('FINISHED A LOOP OF STREAM: ' + str(now))
 
