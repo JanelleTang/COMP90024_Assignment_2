@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from './views/Home.vue'
 import Data from './views/Data.vue'
+import Dashboard from './views/Dashboard.vue'
 
 //Next you need to call Vue.use(Router) to make sure that Router is added as a middleware to our Vue project.
 Vue.use(VueRouter)
@@ -21,6 +22,11 @@ export default new VueRouter({
         path: '/data',
         name: 'Data',
         component: Data,
-        }
+        },
+        {
+        path: '/dashboard',
+        name: 'Dashboard',
+        component: Dashboard,
+        },
     ]
 })
