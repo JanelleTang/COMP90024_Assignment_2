@@ -3,6 +3,8 @@ import json
 import pandas as pd
 from time import sleep
 import copy
+from datetime import datetime
+#pip install openpyxl
 
 def processTweet(tweet, geocoordinate):
     geocoordSplit = geocoordinate.split(',')
@@ -31,6 +33,7 @@ def readKeys():
     #student_1 (Declan)
     #student_2 (Janelle)
     #Student_3 (Shuang)
+    #student_4 (JJ)
 
     return keys_tokens
 
@@ -88,6 +91,7 @@ def harvestTweets(city, cityCoordsDict, keys_tokens, tweet_count, query, languag
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         api = tweepy.API(auth, wait_on_rate_limit=True)
         tweet_data = searchTweets(query, tweet_count, language, point, api)
+        #print(str(point)) #testing reasons, delete
         
         if tweet_data: #if tweet data found append it
             all_tweet_data.append(tweet_data)
@@ -98,21 +102,23 @@ def harvestTweets(city, cityCoordsDict, keys_tokens, tweet_count, query, languag
         
     tweet_df = tweet_df.drop_duplicates(subset='tweet id')
     tweet_df.reset_index(inplace=True, drop=True)
-
+    
     print(tweet_df.to_string())
+    title = 'tweet search melb dump ' + str(datetime.now())[:17] + '.xlsx'
+    tweet_df.to_excel(title, index = False)
 
-
+    
 
 def main():
     cityCoordsDict, cityList = readCityCoords()
     keys_tokens = readKeys()
     tweet_count = 200
-    query = ('climate change OR climatechange OR #climatechange OR Climate Change OR #ClimateChange OR Climate change')
+    query = ('climate change OR climatechange OR #climatechange OR Climate Change OR #ClimateChange OR Climate change OR CLIMATE CHANGE OR GLOBAL WARMING OR Global Warming OR Global warming OR global warming OR climateaction OR Climate Action OR CLIMATE ACTIOn OR Climate action')
+    query = ('the')
     language = 'en'
 
     for city in cityList:
         harvestTweets(city, cityCoordsDict, keys_tokens, tweet_count, query, language)
-        break #DELETE THIS IS JUST FOR TESTING *******************
 
     
 main()
