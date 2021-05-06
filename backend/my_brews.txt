@@ -1,0 +1,16 @@
+couchdb
+geckodriver
+maven
+mpich
+mysql
+nginx
+node
+pandoc
+postgis
+pyenv
+spatialite-gui
+spatialite-tools
+tcl-tk
+uwsgi
+vim
+wget
