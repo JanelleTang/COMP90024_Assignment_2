@@ -6,7 +6,7 @@ import geopy
 import sys
 import os
 from shapely.geometry import Point, Polygon
-from geopy.exc import GeocoderTimedOut
+from geopy.exc import GeocoderTimedOut, GeocoderUnavailable
 from datetime import datetime
 import re
 from geopy.extra.rate_limiter import RateLimiter
@@ -39,6 +39,7 @@ def processTweets(listTweets):
                 continue
             if tweet['user location'].lower() == 'australia' or tweet['user location'].lower() == 'aus':
                 continue
+            location = None
             try:
                 location = locator.geocode(tweet['user location'], viewbox= [(-10.5, 110.99), (-44.43, 157.87)]) 
             except GeocoderTimedOut as e:
@@ -132,6 +133,7 @@ class StdOutListener(tweepy.StreamListener):
         
     def on_error(self, status):
         if status == 420:
+            sleep(5)
             print(status)
             return False
         print('status == 420 did not pick up this error. Here it is though')
