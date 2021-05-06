@@ -23,7 +23,7 @@ class regionListCreateAPIView(APIView):
 
 class regionDetailAPIView(APIView):
     def get_object(self,pk):
-        region = get_object_or_404(Area,pk=pk)
+        region = get_object_or_404(Region,pk=pk)
         return region
 
     def get(self,request,pk):

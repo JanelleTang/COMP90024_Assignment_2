@@ -17,23 +17,7 @@
         md="2"
       >
       <v-card>
-        <v-menu offset-y>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          View
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item>
-          <button id="fit">Australia</button>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+        <button id="fit">Australia</button>
       </v-card>
           
       </v-col>
