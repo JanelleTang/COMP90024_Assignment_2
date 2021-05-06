@@ -1,15 +1,48 @@
 <template>
-  <main>
-    <div class="dashboard">
-      <h1>MAP</h1>
-      <p></p>
-      <div id="map-container"></div>
-    </div>
-  </main>
+  <div class="dashboard">
+    <v-container>
+      <h1>Climate Change Sentiment in Australian Cities</h1>
+    </v-container>
+    <v-row class="ml-14 mr-8">
+      <v-col
+        cols="12"
+        sm="6"
+        md="10"
+      >
+          <div id="map-container"></div>
+      </v-col>
+      <v-col
+        cols="6"
+        sm="6"
+        md="2"
+      >
+      <v-card>
+        <v-menu offset-y>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          color="primary"
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+          View
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item>
+          <button id="fit">Australia</button>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+      </v-card>
+          
+      </v-col>
+    </v-row>
+  </div>
 </template>
-
 <script>
-import { axiosTest } from "../axios";
+import axios from "axios"
+// import { getAPI } from "../axios";
 import Mapbox from "mapbox-gl";
 //import d3 from "d3";
 
@@ -22,7 +55,7 @@ import Mapbox from "mapbox-gl";
               center: [144.9631, -37.8136],
               zoom: 9,
               melb_geo: 'https://data.gov.au/geoserver/vic-local-government-areas-psma-administrative-boundaries/wfs?request=GetFeature&typeName=ckan_bdf92691_c6fe_42b9_a0e2_a4cd716fa811&outputFormat=json',
-              django_geo: "http://localhost:8000/api/data.geojson",
+              django_geo: "http://127.0.0.1:8000/api/data.geojson",
               locations: [["Melbourne", 144.9631,-37.8136],
               ["Sydney",151.2093,-33.8688],
               ["Adelaide",138.6007,-34.9285],
@@ -32,18 +65,30 @@ import Mapbox from "mapbox-gl";
               }
       },
       created() {
-          //axios.get('api/data.geojson').then(data => (this.APIdata = data));
-          axiosTest().then(data => {
-            .then(res => console.log(res.data))
-            .catch(err => console.log(err))
-          }
+          axios.get(this.django_geo).then(response => {
+            this.APIdata = JSON.stringify(response.data)
+          });
+
       },
       mounted() {
+          this.getGeoJSON()
           this.createMap();
           this.load_json();
+          this.boundingBox();
+
       },
 
       methods: {
+          getGeoJSON(){
+            axios.get(this.django_geo).then(response =>{
+              let geo_data = response.data.features;
+              this.geoConf = {
+                "type":"FeatureCollection",
+                "features": geo_data
+              }
+
+            })
+          },
           // ================= CREATE BASE MAP ================= //
           createMap() {
               this.map = new Mapbox.Map({
@@ -62,7 +107,7 @@ import Mapbox from "mapbox-gl";
               this.map.on('load', () => {
                   this.map.addSource('melb_lga', {
                       type: 'geojson',
-                      data: this.APIdata,
+                      data: this.django_geo,
                       });
                   // Add a new layer to visualize the polygon.
                   this.map.addLayer({
@@ -118,6 +163,14 @@ import Mapbox from "mapbox-gl";
                     });
             });
           },
+          boundingBox(){
+            document.getElementById('fit').addEventListener('click', () => {
+              this.map.fitBounds([
+              [113.338953078, -43.6345972634],
+              [153.569469029, -10.6681857235]
+            ]);
+});
+          },
       },
 
   }
@@ -130,5 +183,25 @@ import Mapbox from "mapbox-gl";
       margin: 0 auto;
       border: 1px solid darkgrey;
 
+}
+
+#fit-au {
+display: block;
+position: relative;
+margin: 0px auto;
+width: 50%;
+height: 40px;
+padding: 10px;
+border: none;
+border-radius: 3px;
+font-size: 12px;
+text-align: center;
+color: #fff;
+background: #ee8a65;
+position: absolute;
+   top: 10px;
+   left: 10px;
+   z-index: 1;
+   pointer-events: all;
 }
 </style>

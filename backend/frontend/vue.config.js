@@ -32,7 +32,17 @@ module.exports = {
             .disableHostCheck(true)
             .headers({"Access-Control-Allow-Origin": ["\*"]})
 
-    },
+    configureWebpack: {
+        module: {
+            rules: [
+            {
+                test: /\.geojson$/,
+                loader: 'json-loader'
+            }
+            ]
+        }
+        }
+},
 
     // uncomment before executing 'npm run build' 
     // css: {

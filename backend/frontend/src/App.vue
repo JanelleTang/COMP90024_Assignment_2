@@ -1,8 +1,20 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+    <div id="app">
+        <Sidebar></Sidebar>
+        <v-content>
+          <router-view></router-view>
+        </v-content>
+    </div>
 </template>
+<script>
+// import { FadeTransition } from "vue2-transitions";
+import Sidebar from "@/components/Sidebar"
+export default {
+  components: {
+    Sidebar,
+  },
+};
+</script>
 
 <style>
 #app {
