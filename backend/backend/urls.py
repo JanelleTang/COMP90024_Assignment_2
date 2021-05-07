@@ -17,10 +17,10 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
-from utility import views
+from backend import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',include('locations.api.urls')),
-    path('', views.index, name='index')
+    re_path(r"^.*$", views.index, name='vue-index')
 ]

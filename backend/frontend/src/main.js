@@ -1,6 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
-import router from './router.js'
+import router from './routes/router.js'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import BootstrapVue from 'bootstrap-vue'
 import vuetify from '@/plugins/vuetify' // path to vuetify export

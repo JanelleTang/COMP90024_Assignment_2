@@ -1,28 +1,32 @@
 <template>
     <div id="app">
-        <Sidebar></Sidebar>
-        <v-content>
-          <router-view></router-view>
-        </v-content>
+        <router-view name="header"></router-view>
+        <v-fade-transition mode="out-in">
+          <main>
+            <router-view></router-view> 
+          </main>
+        </v-fade-transition>
     </div>
 </template>
 <script>
 // import { FadeTransition } from "vue2-transitions";
-import Sidebar from "@/components/Sidebar"
+// import Navbar from "@/components/Navbar"
 export default {
   components: {
-    Sidebar,
+    // Navbar,
   },
 };
 </script>
 
 <style>
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  /* font-size:1.3em; */
 }
 
 #nav {
