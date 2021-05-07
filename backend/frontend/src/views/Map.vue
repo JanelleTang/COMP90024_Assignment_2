@@ -55,8 +55,8 @@ import Sidebar from "@/components/Sidebar"
               center: [144.9631, -37.8136],
               zoom: 9,
               melb_geo: 'https://data.gov.au/geoserver/vic-local-government-areas-psma-administrative-boundaries/wfs?request=GetFeature&typeName=ckan_bdf92691_c6fe_42b9_a0e2_a4cd716fa811&outputFormat=json',
-            //   django_geo: "http://127.0.0.1:8000/api/data.geojson",
-            django_geo: "",
+              django_geo: "http://127.0.0.1:8000/api/data.geojson",
+            // django_geo: "",
               locations: [["Melbourne", 144.9631,-37.8136],
               ["Sydney",151.2093,-33.8688],
               ["Adelaide",138.6007,-34.9285],
@@ -196,7 +196,7 @@ import Sidebar from "@/components/Sidebar"
     padding: 0; 
     margin: 0; 
     display: flex;
-    height:100%;
+    height:75vh;
     min-height:400px;
     position:relative;
     border: 1px solid darkgrey;
