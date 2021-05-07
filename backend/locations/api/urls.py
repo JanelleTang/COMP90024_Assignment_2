@@ -17,6 +17,7 @@ urlpatterns = [
                                                                                 'state',
                                                                                 'n_tweets',
                                                                                 'city']), name='data'),
-    path('tweet/',tweet_test_point)                                                                     
+    path('tweet/',tweet_test_point),
+    path('aurin/',pull_aurin_data)
 ]
 

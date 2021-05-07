@@ -8,6 +8,8 @@ from djgeojson.views import GeoJSONLayerView
 from locations.models import Region
 from locations.api.serializers import RegionSerializer
 
+import json
+
 class regionListCreateAPIView(APIView):
     def get(self,request):
         regions = Region.objects
@@ -65,4 +67,9 @@ logger = logging.getLogger('django.debug')
 @require_http_methods(['POST', 'GET'])
 def tweet_test_point(request, *args, **kwargs):
     obj = {"success": True}
+    return json_response(obj)
+
+def pull_aurin_data(request):
+    file = open('locations\\analytics\\AURIN\\aurin.json')
+    obj = json.load(file)
     return json_response(obj)
