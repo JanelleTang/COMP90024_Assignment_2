@@ -1,0 +1,21 @@
+- name: copy github private key to the remote servers
+  copy:
+    src: "/Users/shuangqiu/Desktop/COMP90024_Assignment_2/Ansible/config/comp90024.pem"
+    dest: /home/ubuntu/.ssh/github
+    owner: ubuntu
+    group: ubuntu
+    mode: 0600
+
+- name: configure ssh to use ansible key for github.com
+  template:
+    src: "/Users/shuangqiu/Desktop/COMP90024_Assignment_2/Ansible/config/ssh_config"
+    dest: /home/ubuntu/.ssh/config
+    owner: ubuntu
+    group: ubuntu
+    mode: 0644
+
+- name: clone source code from git
+  git:
+    repo: git@github.com:JanelleTang/COMP90024_Assignment_2.git
+    key_file: /home/ubuntu/.ssh/github
+    dest: '{{ remote_working_directory }}'

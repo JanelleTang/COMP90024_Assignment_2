@@ -1,11 +1,13 @@
 # COMP90024 Project - Team 37
 
 ---
-- hosts: localhost
+- hosts: all
   vars_files:
-    - Variables/Host_variables.yaml
     - Variables/Environment_variables.yaml
+    - Variables/Host_variables.yaml
   gather_facts: true
 
   roles:
-    - role: Install_Environments
+    # - role: Install_Environments
+    # - role: Clone_Repository
+    - role: Mount_Volume
