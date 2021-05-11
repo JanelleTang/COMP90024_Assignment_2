@@ -28,16 +28,19 @@ for file in [{'file_name' : 'OCCUPANCY_1991.csv','index' : ' lga_name_1991'},
     dataFile = dataFile.fillna(0)
 
     for key, values in dataFile.iterrows():
-        location = geolocator.geocode(key + ", Australia",addressdetails=True)
+        try:
+            location = geolocator.geocode(key + ", Australia",addressdetails=True)
+        except:
+            continue
         if location is None:
             continue
         address = location.raw["address"]
         if 'municipality' not in address:
             continue
-        lga = address['municipality']
+        lga = address['municipality'].lower()
         print(lga)
-        city = address.get('city','none')
-        state = address.get('state','none')
+        city = address.get('city','none').lower()
+        state = address.get('state','none').lower()
         if lga not in dataDict:
             dataDict[lga] = {'lga' : lga, 'city' : city, 'state' : state}
         if file['file_name'] == 'LGA_ENERGY_ENVIRON_2010_2014.csv':
@@ -68,18 +71,18 @@ for file in [{'file_name' : 'OCCUPANCY_1991.csv','index' : ' lga_name_1991'},
                     dataDict[lga]['ind_energy'] = dataDict[lga].get('ind_energy',0) + value
                 if colName == ' min_coal_min_p':
                     dataDict[lga]['ind_coal'] = dataDict[lga].get('ind_coal',0) + value
-                if colName == ' min_total_p':
+                if colName == ' min_tot_p':
                     dataDict[lga]['ind_mining'] = dataDict[lga].get('ind_mining',0) + value
         if file['file_name'] == 'INCOME_AND_AGE_2016.csv':
             for colName,value in zip(values.index,values):
-                if colName == 'p_tot_tot':
+                if colName == ' p_tot_tot':
                     dataDict[lga]['age_income_tot'] = dataDict[lga].get('age_income_tot',0) + value
-                if (re.search(r"15\_19",colName) or re.search(r"20\_24",colName) or
-                    re.search(r"25\_34",colName)):
+                if (re.search(r"tot\_15\_19",colName) or re.search(r"tot\_20\_24",colName) or
+                    re.search(r"tot\_25\_34",colName)):
                     dataDict[lga]['age_under_35'] = dataDict[lga].get('age_under_35',0) + value
-                if (re.search(r"3000\_more",colName)):
+                if (re.search(r"3000\_more\_tot",colName)):
                     dataDict[lga]['weekly_income_over_3000'] = dataDict[lga].get('weekly_income_over_3000',0) + value
-                if (re.search(r"1000\_1249",colName)):
+                if (re.search(r"1000\_1249\_tot",colName)):
                     dataDict[lga]['weekly_income_under_1250'] = dataDict[lga].get('weekly_income_under_1250',0) + value
 
 with open("aurin.json",'w') as file:

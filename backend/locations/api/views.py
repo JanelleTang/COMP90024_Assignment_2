@@ -9,6 +9,7 @@ from locations.models import Region
 from locations.api.serializers import RegionSerializer
 
 import json
+import couchdb
 
 class regionListCreateAPIView(APIView):
     def get(self,request):
@@ -70,6 +71,11 @@ def tweet_test_point(request, *args, **kwargs):
     return json_response(obj)
 
 def pull_aurin_data(request):
-    file = open('locations\\analytics\\AURIN\\aurin.json')
-    obj = json.load(file)
+    s = couchdb.Server('http://admin:password@localhost:5984/')
+    db = s['aurin_data']
+    obj=[]
+    for item in db.view('city_level/melb'):
+        obj.append(item.value)
     return json_response(obj)
+
+
