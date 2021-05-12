@@ -32,12 +32,11 @@ class ResponseMessage:
 
 def string_to_list_dict(keys, source):
     # Changed name to represent output
-    
-    data = ujson.load(source)
+    data = ujson.loads(source)
     result = []
-    for item in data["data"]:
+    for row in data["data"]:
         for key in keys:
-            if key not in item:
-                item[key] = ""
-        result.append(item)
+            if key not in row:
+                row[key] = ""
+        result.append(row)
     return result

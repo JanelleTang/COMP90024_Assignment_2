@@ -12,22 +12,23 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
-PROJ_LIB = '/Users/janelletang/Documents/GitHub/CCC_backend/django-env/lib/python3.8/site-packages/osgeo/data/proj'
-if os.name == 'nt':
-    import platform
-    OSGEO4W = r"C:\OSGeo4W"
-    if '64' in platform.architecture()[0]:
-        OSGEO4W += "64"
-    assert os.path.isdir(OSGEO4W), "Directory does not exist: " + OSGEO4W
-    os.environ['OSGEO4W_ROOT'] = OSGEO4W
-    os.environ['GDAL_DATA'] = "C:\Program Files\GDAL\gdal-data" 
-    os.environ['PROJ_LIB'] = OSGEO4W + r"\share\proj"
-    GDAL_LIBRARY_PATH = r'C:\OSGeo4W64\bin\gdal204'
-    os.environ['PATH'] = OSGEO4W + r"\bin;" + os.environ['PATH']
+# PROJ_LIB = '/Users/janelletang/Documents/GitHub/CCC_backend/django-env/lib/python3.8/site-packages/osgeo/data/proj'
+# if os.name == 'nt':
+#     import platform
+#     OSGEO4W = r"C:\OSGeo4W"
+#     if '64' in platform.architecture()[0]:
+#         OSGEO4W += "64"
+#     assert os.path.isdir(OSGEO4W), "Directory does not exist: " + OSGEO4W
+#     os.environ['OSGEO4W_ROOT'] = OSGEO4W
+#     os.environ['GDAL_DATA'] = "C:\Program Files\GDAL\gdal-data" 
+#     os.environ['PROJ_LIB'] = OSGEO4W + r"\share\proj"
+#     GDAL_LIBRARY_PATH = r'C:\OSGeo4W64\bin\gdal204'
+#     os.environ['PATH'] = OSGEO4W + r"\bin;" + os.environ['PATH']
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -51,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    'tweets',
     'locations',
     'rest_framework',
     'corsheaders',
@@ -63,7 +63,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

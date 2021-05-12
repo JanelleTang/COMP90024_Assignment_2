@@ -33,7 +33,7 @@ class CouchDBDriver:
             return None
 
         if not name in self.server:
-            logger.info("create database of name " + name)
+            logger.info("Created database called " + name)
             db = self.server.create(name)
             db.save(CouchDBConfig.views)
             return db
@@ -59,7 +59,6 @@ class CouchDBLoadBalancer:
         self.balance_factor += 1
         self.balance_factor %= self.cluster_size
         return self.servers[self.balance_factor]
-
    
     def getById(self, database, id):
         return self.next().get_database(database).get(id=id)
@@ -75,4 +74,5 @@ class CouchDBLoadBalancer:
     
     def getDatabase(self, database):
         return self.next().get_database(database)
+
 couch_db = CouchDBLoadBalancer()
