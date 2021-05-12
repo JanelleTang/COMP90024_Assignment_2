@@ -12,7 +12,7 @@ with open('/Users/janelletang/Documents/GitHub/CCC_backend/backend/locations/ana
     data = pd.DataFrame.from_dict(data)
 
 
-regions_dict = dd()
+regions_dict = {}
 
 
 def get_lga_data(filepath,geom_field,name_field,state,excluded):
@@ -23,7 +23,7 @@ def get_lga_data(filepath,geom_field,name_field,state,excluded):
             lga_name = feature['properties'][name_field]
             if any(word in lga_name for word in excluded ):
                 continue
-            regions_dict[lga_name.lower()] = {"geometry":poly,"state":state,"total_sentiment":0,"total_tweets":0}
+            regions_dict[lga_name.lower()] = {"geometry":poly}
 
 ## MELBOURNE LGA DATA
 get_lga_data("locations/analytics/data/VIC_LGA.geojson.json","geometry","SH_NAME","vic",["SHIRE","RURAL","ALPINE","GREATER","("])
@@ -33,7 +33,6 @@ get_lga_data("locations/analytics/data/SA_LGA.geojson.json","geometry","lga","sa
 get_lga_data("locations/analytics/data/NSW_LGA.geojson.json","geometry","nsw_lga_2","nsw",["SHIRE","RURAL","UNINCORPORATED","REGIONAL"])
 ## BRISBANE LGA DATA
 get_lga_data("locations/analytics/data/QLD_LGA.geojson.json","geometry","qld_lga__2","qld",["SHIRE","RURAL","ISLAND","REGIONAL"])
-
 
 
 
@@ -47,18 +46,21 @@ def locator(locale):
         print("Check this tweet location")
         return None,None
     if len(address) <3:
-        return None,None
-    return (location.latitude, location.longitude),address["municipality"]
+        return None,None,None
+    return (location.latitude, location.longitude),address["municipality"].lower(),address["state"].lower()
 
 
+results = dd(lambda: dd(int))
 for i,row in data.iterrows():
     location = row["user location"]
-    coordinates,lga = locator(location)
+    coordinates,lga,state = locator(location)
     if lga == None:
         continue
     n_sent = row["sentiment_value"]
-    regions_dict[lga.lower()]["total_sentiment"] += float(n_sent)
-    regions_dict[lga.lower()]["total_tweets"] += 1
+    results[lga]["state"]=state
+    results[lga]["geometry"] = regions_dict[lga]['geometry']
+    results[lga]["total_sentiment"]+=float(n_sent)
+    results[lga]["total_tweets"]+=1
 
 with open('locations/analytics/data/regions_data.json', 'w') as fp:
-    ujson.dump(regions_dict, fp)
+    ujson.dump(results, fp)

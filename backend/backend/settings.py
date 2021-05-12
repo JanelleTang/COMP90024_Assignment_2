@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
-
+PROJ_LIB = '/Users/janelletang/Documents/GitHub/CCC_backend/django-env/lib/python3.8/site-packages/osgeo/data/proj'
 if os.name == 'nt':
     import platform
     OSGEO4W = r"C:\OSGeo4W"
@@ -71,10 +71,6 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
-
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8080'
-]
 
 CORS_ALLOW_METHODS = [
     'GET'

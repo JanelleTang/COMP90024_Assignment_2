@@ -1,7 +1,7 @@
 class CouchDBConfig:
-    domain = ""
-    domains = []
+    domain = "http://127.0.0.1/"
+    domains = ['http://127.0.0.1/']
     username = "admin"
-    password = "123456"
-    port = 5984
-    tweet_db = ""
+    password = "admin"
+    port = "5984"
+    tweet_db_name = "test"

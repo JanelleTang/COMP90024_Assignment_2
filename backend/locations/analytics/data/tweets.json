@@ -1,9 +1,191 @@
-{"total_rows":7,"offset":0,"rows":[
-    {"id":"596b44c6d40af4616b1f0d24920052ec","key":"596b44c6d40af4616b1f0d24920052ec","value":{"rev":"2-c872328aea09475067ca8ea9749014e7"},"doc":{"_id":"596b44c6d40af4616b1f0d24920052ec","_rev":"2-c872328aea09475067ca8ea9749014e7","tweet id":1388782004338978800,"user id":1110869510406340600,"user name":"amg","screen name":"shambolicgirl","followers count":501,"user location":"Melbourne, Victoria","geo":null,"created at":"Sun May 02 09:06:46 +0000 2021","text":"RT @bruce_haigh: #auspol Which are the people the Australian government will protect? Not Indigenous Australians, not the poor, unemployed…","truncated":false,"hashtags":[{"text":"auspol","indices":[17,24]}],"sentiment_value":"0.7"}},
-    {"id":"596b44c6d40af4616b1f0d2492007088","key":"596b44c6d40af4616b1f0d2492007088","value":{"rev":"2-a742dcbbc92b6fc7fbf3b97978c52ba8"},"doc":{"_id":"596b44c6d40af4616b1f0d2492007088","_rev":"2-a742dcbbc92b6fc7fbf3b97978c52ba8","tweet id":1388782630586372000,"user id":238861315,"user name":"AnthChristo😈🐀","screen name":"AnthChristo","followers count":1022,"user location":"Melbourne, Australia","geo":null,"created at":"Sun May 02 09:09:16 +0000 2021","text":"RT @LilyDAmbrosioMP: Victoria is leading the country in tackling climate change – delivering the largest reduction of emissions of any stat…","truncated":false,"hashtags":[],"sentiment_value":0.2}},
-    {"id":"596b44c6d40af4616b1f0d2492008ce0","key":"596b44c6d40af4616b1f0d2492008ce0","value":{"rev":"2-62a5f7c024f03a39cf0b6b27c4e33bcc"},"doc":{"_id":"596b44c6d40af4616b1f0d2492008ce0","_rev":"2-62a5f7c024f03a39cf0b6b27c4e33bcc","tweet id":1388783229457420300,"user id":485500575,"user name":"Hursty","screen name":"Hursticon","followers count":391,"user location":"Australia","geo":null,"created at":"Sun May 02 09:11:38 +0000 2021","text":"RT @bruce_haigh: #auspol Which are the people the Australian government will protect? Not Indigenous Australians, not the poor, unemployed…","truncated":false,"hashtags":[{"text":"auspol","indices":[17,24]}],"sentiment_value":-0.3}},
-    {"id":"596b44c6d40af4616b1f0d24920096ae","key":"596b44c6d40af4616b1f0d24920096ae","value":{"rev":"2-30ab1d2556157df2f1e7fb9f765b03f3"},"doc":{"_id":"596b44c6d40af4616b1f0d24920096ae","_rev":"2-30ab1d2556157df2f1e7fb9f765b03f3","tweet id":1388783453110345700,"user id":162978214,"user name":"Eytan Lenko","screen name":"eytanlenko","followers count":4369,"user location":"Melbourne","geo":null,"created at":"Sun May 02 09:12:32 +0000 2021","text":"Good to see home electrification being a key part of Victoria’s climate change strategy https://t.co/6civ7Wmf7q","truncated":false,"hashtags":[],"sentiment_value":0.5}},
-    {"id":"596b44c6d40af4616b1f0d249200d790","key":"596b44c6d40af4616b1f0d249200d790","value":{"rev":"1-8e9aa07179643bd4a2afd36a982954ce"},"doc":{"_id":"596b44c6d40af4616b1f0d249200d790","_rev":"1-8e9aa07179643bd4a2afd36a982954ce","tweet id":1388783637865193500,"user id":1237669553255006200,"user name":"Silverquick","screen name":"Silverquick13","followers count":401,"user location":"Melbourne, Victoria","geo":null,"created at":"Sun May 02 09:13:16 +0000 2021","text":"RT @LilyDAmbrosioMP: Today we announced our government's ambitious Climate Change Strategy and interim emissions targets.\n\nThis puts Victor…","truncated":false,"hashtags":[],"sentiment_value":0.1}},
-    {"id":"596b44c6d40af4616b1f0d249200e418","key":"596b44c6d40af4616b1f0d249200e418","value":{"rev":"1-c08e2e7504b14627c078e2b184956f80"},"doc":{"_id":"596b44c6d40af4616b1f0d249200e418","_rev":"1-c08e2e7504b14627c078e2b184956f80","tweet id":1388783958754619400,"user id":1375304527532859400,"user name":"Mo Foster","screen name":"MoFoster10","followers count":160,"user location":"Australia","geo":null,"created at":"Sun May 02 09:14:32 +0000 2021","text":"RT @bruce_haigh: #auspol Which are the people the Australian government will protect? Not Indigenous Australians, not the poor, unemployed…","truncated":false,"hashtags":[{"text":"auspol","indices":[17,24]}],"sentiment_value":-0.6}},
-    {"id":"596b44c6d40af4616b1f0d249200f7e1","key":"596b44c6d40af4616b1f0d249200f7e1","value":{"rev":"1-11347938f319b159edea69511be7a512"},"doc":{"_id":"596b44c6d40af4616b1f0d249200f7e1","_rev":"1-11347938f319b159edea69511be7a512","tweet id":1388784266469798000,"user id":2386229700,"user name":"💧💦Just Judith'n'🅰️LF","screen name":"JrehnJ","followers count":3888,"user location":"Adelaide Hills, SA","geo":null,"created at":"Sun May 02 09:15:46 +0000 2021","text":"RT @AndrewPStreet: Between cancel culture, the woke mob and Satan using social media, conservatives have been racking up many triumphant vi…","truncated":false,"hashtags":[],"sentiment_value":-0.4}}
-    ]}
+{
+    "total_rows": 7,
+    "offset": 0,
+    "rows": [
+        {
+            "id": "596b44c6d40af4616b1f0d24920052ec",
+            "key": "596b44c6d40af4616b1f0d24920052ec",
+            "value": {
+                "rev": "2-c872328aea09475067ca8ea9749014e7"
+            },
+            "doc": {
+                "_id": "596b44c6d40af4616b1f0d24920052ec",
+                "_rev": "2-c872328aea09475067ca8ea9749014e7",
+                "tweet id": 1388782004338978800,
+                "user id": 1110869510406340600,
+                "user name": "amg",
+                "screen name": "shambolicgirl",
+                "followers count": 501,
+                "user location": "Melbourne, Victoria",
+                "geo": null,
+                "created at": "Sun May 02 09:06:46 +0000 2021",
+                "text": "RT @bruce_haigh: #auspol Which are the people the Australian government will protect? Not Indigenous Australians, not the poor, unemployed…",
+                "truncated": false,
+                "hashtags": [
+                    {
+                        "text": "auspol",
+                        "indices": [
+                            17,
+                            24
+                        ]
+                    }
+                ],
+                "sentiment_value": "0.7"
+            }
+        },
+        {
+            "id": "596b44c6d40af4616b1f0d2492007088",
+            "key": "596b44c6d40af4616b1f0d2492007088",
+            "value": {
+                "rev": "2-a742dcbbc92b6fc7fbf3b97978c52ba8"
+            },
+            "doc": {
+                "_id": "596b44c6d40af4616b1f0d2492007088",
+                "_rev": "2-a742dcbbc92b6fc7fbf3b97978c52ba8",
+                "tweet id": 1388782630586372000,
+                "user id": 238861315,
+                "user name": "AnthChristo😈🐀",
+                "screen name": "AnthChristo",
+                "followers count": 1022,
+                "user location": "Melbourne, Australia",
+                "geo": null,
+                "created at": "Sun May 02 09:09:16 +0000 2021",
+                "text": "RT @LilyDAmbrosioMP: Victoria is leading the country in tackling climate change – delivering the largest reduction of emissions of any stat…",
+                "truncated": false,
+                "hashtags": [],
+                "sentiment_value": 0.2
+            }
+        },
+        {
+            "id": "596b44c6d40af4616b1f0d2492008ce0",
+            "key": "596b44c6d40af4616b1f0d2492008ce0",
+            "value": {
+                "rev": "2-62a5f7c024f03a39cf0b6b27c4e33bcc"
+            },
+            "doc": {
+                "_id": "596b44c6d40af4616b1f0d2492008ce0",
+                "_rev": "2-62a5f7c024f03a39cf0b6b27c4e33bcc",
+                "tweet id": 1388783229457420300,
+                "user id": 485500575,
+                "user name": "Hursty",
+                "screen name": "Hursticon",
+                "followers count": 391,
+                "user location": "Australia",
+                "geo": null,
+                "created at": "Sun May 02 09:11:38 +0000 2021",
+                "text": "RT @bruce_haigh: #auspol Which are the people the Australian government will protect? Not Indigenous Australians, not the poor, unemployed…",
+                "truncated": false,
+                "hashtags": [
+                    {
+                        "text": "auspol",
+                        "indices": [
+                            17,
+                            24
+                        ]
+                    }
+                ],
+                "sentiment_value": -0.3
+            }
+        },
+        {
+            "id": "596b44c6d40af4616b1f0d24920096ae",
+            "key": "596b44c6d40af4616b1f0d24920096ae",
+            "value": {
+                "rev": "2-30ab1d2556157df2f1e7fb9f765b03f3"
+            },
+            "doc": {
+                "_id": "596b44c6d40af4616b1f0d24920096ae",
+                "_rev": "2-30ab1d2556157df2f1e7fb9f765b03f3",
+                "tweet id": 1388783453110345700,
+                "user id": 162978214,
+                "user name": "Eytan Lenko",
+                "screen name": "eytanlenko",
+                "followers count": 4369,
+                "user location": "Melbourne",
+                "geo": null,
+                "created at": "Sun May 02 09:12:32 +0000 2021",
+                "text": "Good to see home electrification being a key part of Victoria’s climate change strategy https://t.co/6civ7Wmf7q",
+                "truncated": false,
+                "hashtags": [],
+                "sentiment_value": 0.5
+            }
+        },
+        {
+            "id": "596b44c6d40af4616b1f0d249200d790",
+            "key": "596b44c6d40af4616b1f0d249200d790",
+            "value": {
+                "rev": "1-8e9aa07179643bd4a2afd36a982954ce"
+            },
+            "doc": {
+                "_id": "596b44c6d40af4616b1f0d249200d790",
+                "_rev": "1-8e9aa07179643bd4a2afd36a982954ce",
+                "tweet id": 1388783637865193500,
+                "user id": 1237669553255006200,
+                "user name": "Silverquick",
+                "screen name": "Silverquick13",
+                "followers count": 401,
+                "user location": "Melbourne, Victoria",
+                "geo": null,
+                "created at": "Sun May 02 09:13:16 +0000 2021",
+                "text": "RT @LilyDAmbrosioMP: Today we announced our government's ambitious Climate Change Strategy and interim emissions targets.\n\nThis puts Victor…",
+                "truncated": false,
+                "hashtags": [],
+                "sentiment_value": 0.1
+            }
+        },
+        {
+            "id": "596b44c6d40af4616b1f0d249200e418",
+            "key": "596b44c6d40af4616b1f0d249200e418",
+            "value": {
+                "rev": "1-c08e2e7504b14627c078e2b184956f80"
+            },
+            "doc": {
+                "_id": "596b44c6d40af4616b1f0d249200e418",
+                "_rev": "1-c08e2e7504b14627c078e2b184956f80",
+                "tweet id": 1388783958754619400,
+                "user id": 1375304527532859400,
+                "user name": "Mo Foster",
+                "screen name": "MoFoster10",
+                "followers count": 160,
+                "user location": "Australia",
+                "geo": null,
+                "created at": "Sun May 02 09:14:32 +0000 2021",
+                "text": "RT @bruce_haigh: #auspol Which are the people the Australian government will protect? Not Indigenous Australians, not the poor, unemployed…",
+                "truncated": false,
+                "hashtags": [
+                    {
+                        "text": "auspol",
+                        "indices": [
+                            17,
+                            24
+                        ]
+                    }
+                ],
+                "sentiment_value": -0.6
+            }
+        },
+        {
+            "id": "596b44c6d40af4616b1f0d249200f7e1",
+            "key": "596b44c6d40af4616b1f0d249200f7e1",
+            "value": {
+                "rev": "1-11347938f319b159edea69511be7a512"
+            },
+            "doc": {
+                "_id": "596b44c6d40af4616b1f0d249200f7e1",
+                "_rev": "1-11347938f319b159edea69511be7a512",
+                "tweet id": 1388784266469798000,
+                "user id": 2386229700,
+                "user name": "💧💦Just Judith'n'🅰️LF",
+                "screen name": "JrehnJ",
+                "followers count": 3888,
+                "user location": "Adelaide Hills, SA",
+                "geo": null,
+                "created at": "Sun May 02 09:15:46 +0000 2021",
+                "text": "RT @AndrewPStreet: Between cancel culture, the woke mob and Satan using social media, conservatives have been racking up many triumphant vi…",
+                "truncated": false,
+                "hashtags": [],
+                "sentiment_value": -0.4
+            }
+        }
+    ]
+}

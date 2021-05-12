@@ -9,7 +9,10 @@ logger = logging.getLogger("django.info")
 
 class CouchDBDriver:
     connected = False
-    def __init__(self, domain=CouchDBConfig.domain, port=CouchDBConfig.port, password=CouchDBConfig.password, username=CouchDBConfig.username):
+    def __init__(self, domain=CouchDBConfig.domain, 
+                        port=CouchDBConfig.port, 
+                        password=CouchDBConfig.password, 
+                        username=CouchDBConfig.username):
         self.domain = domain
         self.port = port
         self.password = password
@@ -26,12 +29,19 @@ class CouchDBDriver:
             logger.info("Connect unsuccesfully")
 
     def get_database(self, name):
-        if not connected:
+        if not self.connected:
             return None
-        try:
-            return self.server[name]
-        except Exception:
-            pass
+
+        if not name in self.server:
+            logger.info("create database of name " + name)
+            db = self.server.create(name)
+            db.save(CouchDBConfig.views)
+            return db
+        else:
+            try:
+                return self.server[name]
+            except Exception as e:
+                logger.error(e)
 
 # round robin load balancer technique
 class CouchDBLoadBalancer:
@@ -41,7 +51,7 @@ class CouchDBLoadBalancer:
     def __init__(self, CouchDBConfig=CouchDBConfig):
         self.servers = []
         for domain in CouchDBConfig.domains:
-            self.servers.append(CouchDBDriver(domian=domain))
+            self.servers.append(CouchDBDriver(domain=domain))
 
         self.cluster_size = len(self.servers)
 
@@ -63,7 +73,6 @@ class CouchDBLoadBalancer:
     def compact(self, database):
         return self.next().get_database(database).compact()
     
-    def getCurrentDatabase(self, database):
+    def getDatabase(self, database):
         return self.next().get_database(database)
-
 couch_db = CouchDBLoadBalancer()

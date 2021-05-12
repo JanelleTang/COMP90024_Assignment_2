@@ -101,7 +101,7 @@ import Sidebar from "@/components/Sidebar"
               this.map = new Mapbox.Map({
                   accessToken:"pk.eyJ1IjoiamFuZWxsZXQxIiwiYSI6ImNrZXYwd3VraDIyMm4ycXF2em9yanMzOHYifQ.gBExgtEISuunP4aq3jU77g",
                   container: "map-container",
-                  style: 'mapbox://styles/janellet1/ckeziaeb03o3219s3eapgb30p',
+                  style: 'mapbox://styles/janellet1/ckoe0bqgk1yyf18nz5tij50u6',
                   minzoom: 5,
                   center: this.center, 
                   zoom: this.zoom,
