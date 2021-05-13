@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <bubble-chart
+	<bubble-chart
       v-if="loaded"
-      :chart-data="chartdata"
+      :chart-data="newChartData"
 	  :options="options"/>
   </div>
 </template>
@@ -14,20 +14,17 @@ import BubbleChart from "@/components/scatter.js"
 export default {
   name: "BubbleChartContainer",
   components : {BubbleChart},
+  props : ["chartdata"],
   data: () => ({
-	// api connects to couchbase data from AURIN
-	APIAurin : "http://localhost:8000/api/aurin/",
 	loaded: false,
-	chartdata: null,
-	options: null,
+	newChartData: null,
+	options: null
   }),
   async mounted() {
 	this.loaded = false
 	try {
-		
-		axios.get(this.APIAurin).then((response) => {
-		this.chartdata = chartDataFormat(response.data,'pleasant_community','multiculturalism_opinion') 
-		
+		new Promise((resolve, reject) =>{
+		this.newChartData = chartDataFormat(this.chartdata,'n_tweets','sentiment_value') 
 		this.options = {
 			scales : {
 				xAxes: [{
@@ -51,25 +48,24 @@ export default {
 				}
 			}
 		}
+		resolve('')
 		}).then(() => {
-			// only create chart once the data is returned from api
+		// only create chart once the data is returned from api
 			this.loaded=true
 		})
+		
 		
 	
 	} catch (e) {
 		console.log("test3")
 		console.error(e)
 	}
-	methods : {
-		
-	}
   }
 
 }
 function chartDataFormat(data, xVar, yVar) {
 			data = data.filter((d) => { return xVar in d && yVar in d;})
-			var pointData =  data.map((d) => {return {'x' : d[xVar], 'y' : d[yVar], 'r' : 10,
+			var pointData =  data.map((d) => {return {'x' : +d[xVar], 'y' : +d[yVar], 'r' : 10,
 				'label' : d['lga']} })
 			return {
 				datasets: [{
