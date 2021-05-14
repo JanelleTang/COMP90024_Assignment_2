@@ -1,14 +1,15 @@
 ---
+
 - hosts: dbServers
   vars_files:
-    - host_vars/Environment_variables.yaml
+    - Variables/CouchDB_variables.yaml
   gather_facts: true
   roles:
-    - role: CouchDB
+    - role: Deploy_CouchDB
 
 - hosts: instance1
   vars_files:
-    - host_vars/Environment_variables.yaml
+    - Variables/Environment_variables.yaml
   gather_facts: true
   roles:
     - role: Webserver
@@ -16,7 +17,7 @@
 
 - hosts: instance2
   vars_files:
-    - host_vars/Environment_variables.yaml
+    - Variables/Environment_variables.yaml
   gather_facts: true
   roles:
     - role: DeployBackend
@@ -24,7 +25,7 @@
 
 - hosts: instance3
   vars_files:
-    - host_vars/Environment_variables.yaml
+    - Variables/Environment_variables.yaml
   gather_facts: true
   roles:
     - role: DeployNLP
@@ -32,7 +33,7 @@
 
 - hosts: instance4
   vars_files:
-    - host_vars/Environment_variables.yaml
+    - Variables/Environment_variables.yaml
   gather_facts: true
   roles:
     - role: DeployML
