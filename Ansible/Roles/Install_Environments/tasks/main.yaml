@@ -1,5 +1,4 @@
 ---
 
-- include: install_environment.yaml
-
-- include: proxy.yaml
+- include_tasks: proxy.yaml
+- include_tasks: install_environment.yaml
