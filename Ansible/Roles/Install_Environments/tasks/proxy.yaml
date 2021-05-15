@@ -22,15 +22,13 @@
   copy:
     dest: '/etc/systemd/system/docker.service.d/http-proxy.conf'
     content: |
-      [service]
-      Environment="HTTP_PROXY={{proxy_address}}"
-      Environment="HTTPS_PROXY={{proxy_address}}"
+      [Service]
+      Environment="HTTP_PROXY={{ proxy_address }}"
+      Environment="HTTPS_PROXY={{ proxy_address }}"
       Environment="NO_PROXY=localhost,127.0.0.1,localaddress,172.16.0.0/12,.melbourne.rc.nectar.org.au,.storage.unimelb.edu.au,.cloud.unimelb.edu.au"
 
-- name: reload configs
+- name: add container config
   become: yes
-  command: systemctl daemon-reload
-
-- name: restart docker server
-  become: yes
-  command: systemctl restart docker
+  template:
+    src: config.json.j2
+    dest: "~/.docker/config.json"

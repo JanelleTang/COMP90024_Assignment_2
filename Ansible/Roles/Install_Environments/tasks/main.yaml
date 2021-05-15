@@ -2,3 +2,11 @@
 
 - include_tasks: proxy.yaml
 - include_tasks: install_environment.yaml
+
+- name: reload configs
+  become: yes
+  command: systemctl daemon-reload
+
+- name: restart docker server
+  become: yes
+  command: systemctl restart docker

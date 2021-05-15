@@ -14,19 +14,9 @@
     install_recommends: no
     update_cache: yes
 
-# - name: Add Docker apt repository key
-#   become: yes
-#   apt_key:
-#     url: https://download.docker.com/linux/ubuntu/gpg
-#     state: present
-
-# - name: Add Docker apt repository and update cache
-#   become: yes
-#   apt_repository:
-#     repo: "deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
-#     mode: '644'
-#     update_cache: yes
-#     state: present
+- name: add apt repository
+  become: yes
+  shell: add-apt-repository ppa:ubuntugis/ppa
 
 - name: Install docker-ce
   become: yes
@@ -44,9 +34,19 @@
     install_recommends: no
     update_cache: yes
 
-- name: Install docker-compose
+# - name: Install docker-compose
+#   become: yes
+#   pip:
+#     name: ['docker-compose']
+#     version: 1.22.0
+#     state: present
+
+- name: Downloading the docker compose
   become: yes
-  pip:
-    name: ['docker-compose']
-    version: 1.22.0
-    state: present
+  shell: curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+- name: Add executable permission to the binary
+  become: yes
+  file:
+    dest: /usr/local/bin/docker-compose
+    mode: a+x
