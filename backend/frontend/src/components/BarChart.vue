@@ -5,13 +5,11 @@ import { Bar } from 'vue-chartjs'
 
 export default {
   extends: Bar,
-  props : ["chartData"],
+  props : ["chartData","options"],
   data: () => ({
-	options: {
-    maintainAspectRatio: false,
-	aspectRatio:.5}
   }),
   mounted() {
+	console.log(this.options)
    this.renderChart(this.chartData, this.options)
   }
  }
