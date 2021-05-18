@@ -1,0 +1,8 @@
+web:
+  image: nginx
+  volumes:
+   - /home/ubuntu/conf/nginx.conf:/etc/nginx/nginx/nginx.conf
+   - /home/ubuntu/logs:/var/log/nginx
+   - {{frontend_directory}}/dist:/usr/share/nginx/dist
+  ports:
+   - "80:80"

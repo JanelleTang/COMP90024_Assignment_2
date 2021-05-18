@@ -16,19 +16,19 @@ volumes:
   - vol_name: instance1-vol
     vol_size: 160
     device: /dev/vdb
-    mountpoint: /
+    mountpoint: /data
   - vol_name: instance2-vol
     vol_size: 160
     device: /dev/vdb
-    mountpoint: /
+    mountpoint: /data
   - vol_name: instance3-vol
     vol_size: 160
     device: /dev/vdb
-    mountpoint: /
+    mountpoint: /data
   - vol_name: instance4-vol
     vol_size: 20
     device: /dev/vdb
-    mountpoint: /
+    mountpoint: /data
 #
 # For Security group Variables
 security_groups:

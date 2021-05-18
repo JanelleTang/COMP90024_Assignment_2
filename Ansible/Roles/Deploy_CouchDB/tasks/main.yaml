@@ -1,0 +1,26 @@
+- name: create directory for couchdb config
+  become: yes
+  file:
+    path: '{{config_path}}'
+    recurse: yes
+    state: directory
+
+- name: copy couchdb config file to couchdb config
+  template:
+    src: nginx.conf.j2
+    dest: '{{config_path}}'
+    owner: ubuntu
+    group: ubuntu
+
+- name: copy docker compose to couchdb config
+  template:
+    src: couchdb_docker_compose.yml.j2
+    dest: '{{config_path}}/docker-compose.yml'
+    owner: ubuntu
+    group: ubuntu
+
+- name: invoke docker compose to create container
+  become: yes
+  command: 
+    cmd: docker-compose up --build -d --force-recreate
+    chdir: '/home/ubuntu/couchdb'

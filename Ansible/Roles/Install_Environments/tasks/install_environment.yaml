@@ -50,3 +50,11 @@
   file:
     dest: /usr/local/bin/docker-compose
     mode: a+x
+
+- name: Downloading node.js 10
+  become: yes
+  shell: curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash
+
+- name: install node.js 10
+  become: yes
+  shell: apt -y install nodejs make gcc g++

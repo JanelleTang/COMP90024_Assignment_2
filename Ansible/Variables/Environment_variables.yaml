@@ -1,4 +1,5 @@
 ---
 project_working_directory: /Users/shuangqiu/Desktop/COMP90024_ASSIGNMENT_2/Ansible
 remote_working_directory: /home/ubuntu/COMP90024
+frontend_directory: /home/ubuntu/COMP90024/backend/frontend
 proxy_address: http://wwwproxy.unimelb.edu.au:8000/

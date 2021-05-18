@@ -1,40 +1,32 @@
 ---
 
-- hosts: dbServers
+- hosts: instance1
   vars_files:
     - Variables/CouchDB_variables.yaml
   gather_facts: true
   roles:
     - role: Deploy_CouchDB
 
+
 - hosts: instance1
   vars_files:
     - Variables/Environment_variables.yaml
   gather_facts: true
   roles:
-    - role: Webserver
-    - role: Docker
+    - role: Deploy_Nginx
+    - role: Deploy_Django
 
-- hosts: instance2
+- hosts: instance2,instance3
   vars_files:
     - Variables/Environment_variables.yaml
   gather_facts: true
   roles:
-    - role: DeployBackend
-    - role: Docker
-
-- hosts: instance3
-  vars_files:
-    - Variables/Environment_variables.yaml
-  gather_facts: true
-  roles:
-    - role: DeployNLP
-    - role: Docker
+    - role: Deploy_Django
 
 - hosts: instance4
   vars_files:
     - Variables/Environment_variables.yaml
   gather_facts: true
   roles:
-    - role: DeployML
-    - role: Docker
+    - role: Deploy_Crawler
+    - role: Deploy_Sentiment_Analyser

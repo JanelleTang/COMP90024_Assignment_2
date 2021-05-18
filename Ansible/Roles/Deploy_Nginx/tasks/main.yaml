@@ -1,0 +1,34 @@
+---
+- name: create directory for config
+  become: yes
+  file:
+    path: '/home/ubuntu/conf'
+    recurse: yes
+    state: directory
+
+- name: create directory for logs
+  become: yes
+  file:
+    path: '/home/ubuntu/logs'
+    recurse: yes
+    state: directory
+
+- name: copy Nginx configuration file to server
+  template:
+    src: nginx.conf.j2
+    dest: '/home/ubuntu/conf/nginx.conf'
+    owner: ubuntu
+    group: ubuntu
+
+- name: copy Nginx docker compose file to server
+  template:
+    src: docker-compose.yml.j2
+    dest: '/home/ubuntu/conf/docker-compose.yml'
+    owner: ubuntu
+    group: ubuntu
+
+- name: invoke docker compose to create container
+  become: yes
+  command: 
+    cmd: docker-compose up --build -d --force-recreate
+    chdir: '/home/ubuntu/conf'
