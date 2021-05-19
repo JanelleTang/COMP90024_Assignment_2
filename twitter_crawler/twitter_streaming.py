@@ -6,15 +6,24 @@ import geopy
 import sys
 import os
 from shapely.geometry import Point, Polygon
-from geopy.exc import GeocoderTimedOut, GeocoderUnavailable
+from geopy.exc import GeocoderTimedOut
+from geopy.exc import GeocoderUnavailable
 from datetime import datetime
 import re
 from geopy.extra.rate_limiter import RateLimiter
+from user_crawler import main as crawler_main
+import pandas as pd
 
-consumer_key='gqeaPMcHDSiBP2DDrKIj14oJ4'
-consumer_secret='EEcwBh5pUPXbtMzHOzIbowIa3jwlFB929UTAK7xBVvyyUjNAM3'
-access_token='1384728716828282886-wYaaBcTYOlOYFoZeMHFSt6A5NCyDb7'
-access_token_secret='pVBHMmbRd8iV8Njj8Tuo52wsc8sGZKsPEU2vaRwEqgZ0I'
+
+#needs python 3.6
+
+#this is student 4
+consumer_key='c1eQif3Bf37s1MriPv6rb5yET' 
+consumer_secret='ze9lyMzHM6H0yyne1LkfduvpfNJ9seAL9clhAtPAZx3T4KruIp'
+access_token='1384342701861007364-llYZOhRfo5G7J7O8pygCaO6W6wZfS2'
+access_token_secret='d2yR54mrpeXiwau2zZgb4SMuObAPCpR2TInUROPxpZN3X'
+
+sleepTimer = 5
 
 def processTweets(listTweets):
     processed_tweets = []
@@ -23,9 +32,6 @@ def processTweets(listTweets):
     for tweet in listTweets:
         if tweet['user location']:
             locator = geopy.Nominatim(user_agent='myGeocoder')
-            #if tweet['user location'].lower() == 'sydney' or tweet['user location'] == 'Brisbane' or tweet['user location'] == 'Sydney, Australia' or tweet['user location'] == 'Brisbane, Australia' or tweet['user location'] == 'Australia, Sydney' or tweet['user location'] == 'Australia, Brisbane' or tweet['user location'] == 'Brisbane, Queensland' or tweet['user location'] == 'Sydney, New South Wales':
-                #processed_tweets.append(tweet)
-                #continue
             cities = ['sydney', 'melbourne', 'brisbane']
 
             found = False
@@ -39,15 +45,15 @@ def processTweets(listTweets):
                 continue
             if tweet['user location'].lower() == 'australia' or tweet['user location'].lower() == 'aus':
                 continue
-            location = None
             try:
                 location = locator.geocode(tweet['user location'], viewbox= [(-10.5, 110.99), (-44.43, 157.87)]) 
             except GeocoderTimedOut as e:
                 print("Geocoder TimedOut... sleeping 5")
                 sleep(5)
+
                 continue
             except GeocoderUnavailable as e:
-                print("Geocpder Unavailable.... sleeping 5")
+                print("Geocoder Unavailable.... sleeping 5")
                 sleep(5)
  
             except Exception as e:
@@ -68,18 +74,20 @@ def processTweets(listTweets):
 
 def sendTweets(tweets_for_submission):
     if tweets_for_submission:
-        if os.path.isfile('tweetDump.txt') and os.path.getsize('tweetDump.txt') > 0:
-            with open('tweetDump.txt') as file:
+        if os.path.isfile('StreamtweetDump.json') and os.path.getsize('StreamtweetDump.json') > 0:
+            with open('StreamtweetDump.json') as file:
                 data = json.load(file)
                 data.extend(tweets_for_submission)
                 file.close()
 
-                with open('tweetDump.txt', 'w') as outfile:
-                    json.dump(data, outfile)
+                with open('StreamtweetDump.json', 'w') as outfile:
+                    tweet_df = pd.DataFrame(data)
+                    json.dump(data, outfile, default=str, indent=4)
                     outfile.close()
+                    tweet_df.to_excel('streamingDumpWithCrawler.xlsx', index = False)
         else:
-            with open('tweetDump.txt', 'w') as outfile:
-                json.dump(tweets_for_submission, outfile)
+            with open('StreamtweetDump.json', 'w') as outfile:
+                json.dump(tweets_for_submission, outfile, default=str, indent=4)
                 outfile.close()
         now = datetime.now()
 
@@ -102,15 +110,20 @@ class StdOutListener(tweepy.StreamListener):
     def on_data(self,data):
         try:
             res = json.loads(data)
-            temp_dict = {'tweet id': res['id'], 'user id': res['user']['id'], 'user name': res['user']['name'], 
-            'screen name': res['user']['screen_name'], 'followers count': res['user']['followers_count'], 
-            'user location': res['user']['location'], 'geo': res['geo'], 'created at': res['created_at'], 
-            'text': res['text'], 'truncated': res['truncated'], 'hashtags': []}
+            temp_dict = {'tweet id': res['id'], 'user id': res['user']['id'], 'text': res['text'], 'lang' : res['lang'],
+            'user name': res['user']['name'], 'user location': res['user']['location'],
+            'geo': res['geo'],'hashtags': [],'created at': res['created_at'], 
+            'followers count': res['user']['followers_count'], 
+             }
 
-            if temp_dict['truncated']:
+            if res['truncated']:
                 temp_dict['text']= res['extended_tweet']['full_text']
             if res['entities']['hashtags']:
-                temp_dict['hashtags'] = res['entities']['hashtags']
+                for hashtag in res['entities']['hashtags']:
+                    temp_dict['hashtags'].append(hashtag['text'])
+                    #print('HASHTAGs: ' + hashtag['text'])
+ 
+                #print('we found no hashtags: ' + temp_dict['text'])
 
             
             self.tweets.append(temp_dict)
@@ -133,7 +146,6 @@ class StdOutListener(tweepy.StreamListener):
         
     def on_error(self, status):
         if status == 420:
-            sleep(5)
             print(status)
             return False
         print('status == 420 did not pick up this error. Here it is though')
@@ -153,14 +165,27 @@ if __name__=='__main__':
     auth.set_access_token(access_token, access_token_secret)
 
     stream = tweepy.Stream(auth, l, )
-    arguments = ['climate change', 'climatechange', 'global warming', 'cimateaction', 'climate action']
+    arguments = ['climate change', 'climatechange', 'global warming', 'cimateaction', 'climate action', 'globalwarming']
 
     while True:
+        print('about to start stream')
         stream.filter(track=arguments,languages=['en','english'])  
         processedTweets = processTweets(l.return_tweets())
+        if not processedTweets:
+            l.clear_tweets()
+            print('no aus tweets found')
+            continue
+
+        print('tweets found good luck - about to fetch historic tweets from user timeline')
+        user_IDs = []
+        for tweet in processedTweets:
+            user_IDs.append(tweet['user id'])
+        user_IDs = list(set(user_IDs))
+        fetched_user_tweets = crawler_main(user_IDs)
+        print('finished fetching tweets from user profile')
+        processedTweets.extend(fetched_user_tweets)
+
         sendTweets(processedTweets)
         l.clear_tweets()
 
-        #now = datetime.now()
-        #print('FINISHED A LOOP OF STREAM: ' + str(now))
 
