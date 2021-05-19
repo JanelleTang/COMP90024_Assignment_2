@@ -13,11 +13,26 @@ from geopy.exc import GeocoderTimedOut
 from datetime import datetime
 import re
 
-userIDs = [1253072343804469248, 3834645913, 733983882, 103809511, 1052354553750814720, 16834659]
-
 def receiveUserIDs():
-    a = 1
-    #insert receiving code
+    ID_list = []
+    with open('premHistFinalTweetsProcessed.json') as file:
+        data = json.load(file)
+        file.close()
+
+    for tweet in data:
+        ID_list.append(tweet['user id'])
+
+    ID_list = list(set(ID_list))
+
+    #if os.path.isfile('userCrawlerData.txt') and os.path.getsize('userCrawlerData.txt') > 0:
+        #with open('userCrawlerData.txt') as file:
+            #data = json.load(file)
+            #file.close()
+            #for tweet in data:
+                #if tweet['user id'] in ID_list:
+                    #ID_list.remove(tweet['user id'])
+    
+    return ID_list
 
 def readKeys():
     f = open("keys_tokens.txt", "r")
@@ -35,7 +50,6 @@ def tweetRelevent(tweet):
 
     for keyword in keywords:
         if re.search(keyword, tweet['text'].lower()):
-            print('FOUND A RELEVENT TWEET')
             return True
     return False
 
@@ -46,7 +60,12 @@ def processTweets(tweets):
         if not tweet.id:
             continue
         temp_dict = {'tweet id': tweet.id, 'user id': tweet.user.id, 'text': tweet.text, 'lang': tweet.lang, 'user location': tweet.user.location, 
-        'user geo_enabled': tweet.user.geo_enabled, 'coordinates': tweet.coordinates, 'created_at': tweet.created_at}
+        'user geo_enabled': tweet.user.geo_enabled, 'coordinates': tweet.coordinates, 'created_at': tweet.created_at, 'hashtags': []}
+        if tweet.entities['hashtags']:
+            for hashtag in tweet.entities['hashtags']:
+                temp_dict['hashtags'].append(hashtag['text'])
+        else:
+            print('we found no hashtags???? text: ' + tweet.text)
         if not tweetRelevent(temp_dict):
             continue
         processed_tweets.append(temp_dict)
@@ -61,29 +80,52 @@ def searchTweets(api, userID):
         print(e)
         return None
     if processed_tweets:
-        print(processed_tweets)
         return processed_tweets
 
-def harvestTweets(api, userIDs):
+def sendTweets(tweets_for_submission):
+    if tweets_for_submission:
+        if os.path.isfile('userCrawlerDatav2.txt') and os.path.getsize('userCrawlerDatav2.txt') > 0:
+            with open('userCrawlerDatav2.txt') as file:
+                data = json.load(file)
+                data.extend(tweets_for_submission)
+                file.close()
+
+                with open('userCrawlerDatav2.txt', 'w') as outfile:
+                    tweet_df = pd.DataFrame(data)
+                    json.dump(data, outfile, indent=4, default=str)
+                    outfile.close()
+                    tweet_df = tweet_df.drop_duplicates(subset='tweet id')
+                    tweet_df.reset_index(inplace=True, drop=True)
+                    #title = 'premium search hist prem' + str(datetime.now())[:17] + '.xlsx'
+                    tweet_df.to_excel('userCrawlerDumpv2.xlsx', index = False)
+        else:
+            with open('userCrawlerDatav2.txt', 'w') as outfile:
+                tweet_df = pd.DataFrame(tweets_for_submission)
+                json.dump(tweets_for_submission, outfile, indent=4, default=str)
+                outfile.close()
+                tweet_df = tweet_df.drop_duplicates(subset='tweet id')
+                tweet_df.reset_index(inplace=True, drop=True)
+                #title = 'premium search hist ' + str(datetime.now())[:17] + '.xlsx'
+                tweet_df.to_excel('userCrawlerDumpv2.xlsx', index = False)
+
+
+def harvestTweets(api, userIDs): #insert USERID
     final_tweets = []
 
     for userID in userIDs:
         tweets_found = searchTweets(api, userID)
         if tweets_found:
+            #sendTweets(tweets_found) #remove in final
             final_tweets.extend(tweets_found)
+    return final_tweets
 
 
-def main():
+def main(ID_list): #insert ID_list here
     consumer_key = 'gb66mKjCEv70Wyk8R9IOHw24F'
     consumer_secret ='TFc1oMo5hkDVsxcwTCjYhTGvzt68mIm4uzsanlJK0WFsJNdpRi'
     access_token = '1385438387054596098-iW8kTEeFOzCBHQnHSuUF0KfDiBdq2L'
     access_token_secret = 'VvHR7tUgIY8h7airxseHPGSEwToYRhAjNiQ8Danr4iUTT'
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     api = tweepy.API(auth, wait_on_rate_limit=True)
+    return harvestTweets(api, ID_list)
 
-    receiveUserIDs()
-    keys_tokens = readKeys()
-    harvestTweets(api, userIDs)
-
-
-main()
