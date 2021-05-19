@@ -1,0 +1,10 @@
+tweepy==3.10.0
+geopandas==0.6.1
+geopy==2.1.0
+Shapely==1.6.4
+regex==2021.4.4
+pandas==1.2.4
+numpy==1.20.2
+
+
+
