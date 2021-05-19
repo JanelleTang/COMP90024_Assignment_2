@@ -7,26 +7,36 @@
   roles:
     - role: Deploy_CouchDB
 
+- hosts: instance1
+  vars_files:
+    - Variables/Environment_variables.yaml
+    - Variables/Host_variables.yaml
+  gather_facts: true
+  roles:
+    - role: Config_CouchDB_Cluster
+
+
+- hosts: instance1,instance2,instance3
+  vars_files:
+    - Variables/Environment_variables.yaml
+    - Variables/Host_variables.yaml
+  gather_facts: true
+  roles:
+    - role: Deploy_Django
 
 - hosts: instance1
   vars_files:
     - Variables/Environment_variables.yaml
+    - Variables/Host_variables.yaml
   gather_facts: true
   roles:
     - role: Deploy_Nginx
-    - role: Deploy_Django
 
-- hosts: instance2,instance3
-  vars_files:
-    - Variables/Environment_variables.yaml
-  gather_facts: true
-  roles:
-    - role: Deploy_Django
 
-- hosts: instance4
-  vars_files:
-    - Variables/Environment_variables.yaml
-  gather_facts: true
-  roles:
-    - role: Deploy_Crawler
-    - role: Deploy_Sentiment_Analyser
+# - hosts: instance4
+#   vars_files:
+#     - Variables/Environment_variables.yaml
+#   gather_facts: true
+#   roles:
+#     - role: Deploy_Crawler
+#     - role: Deploy_Sentiment_Analyser

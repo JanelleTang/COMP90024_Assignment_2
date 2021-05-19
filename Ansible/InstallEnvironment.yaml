@@ -6,7 +6,6 @@
     - Variables/Environment_variables.yaml
     - Variables/Host_variables.yaml
   gather_facts: true
-
   roles:
     - role: Install_Environments
     - role: Clone_Repository

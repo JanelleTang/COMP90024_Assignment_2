@@ -14,6 +14,7 @@
     state: directory
 
 - name: copy Nginx configuration file to server
+  become: yes
   template:
     src: nginx.conf.j2
     dest: '/home/ubuntu/conf/nginx.conf'
@@ -21,6 +22,7 @@
     group: ubuntu
 
 - name: copy Nginx docker compose file to server
+  become: yes
   template:
     src: docker-compose.yml.j2
     dest: '/home/ubuntu/conf/docker-compose.yml'

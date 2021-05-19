@@ -5,21 +5,32 @@
     recurse: yes
     state: directory
 
-- name: copy local.ini file to couchdb config
-  template:
-    src: local.ini.j2
-    dest: '{{config_path}}/local.ini'
-    owner: ubuntu
-    group: ubuntu
-
 - name: copy vm.args file to couchdb config
+  become: yes
   template:
     src: vm.args.j2
     dest: '{{config_path}}/vm.args'
     owner: ubuntu
     group: ubuntu
 
+- name: copy docker.ini file to couchdb config
+  become: yes
+  template:
+    src: docker.ini.j2
+    dest: '{{config_path}}/docker.ini'
+    owner: ubuntu
+    group: ubuntu
+
+- name: copy default.ini file to couchdb config
+  become: yes
+  template:
+    src: default.ini.j2
+    dest: '{{config_path}}/default.ini'
+    owner: ubuntu
+    group: ubuntu
+
 - name: copy docker compose to couchdb config
+  become: yes
   template:
     src: couchdb_docker_compose.yml.j2
     dest: '{{config_path}}/docker-compose.yml'

@@ -8,9 +8,9 @@ instance_image: 916cad7a-c545-48b2-b36c-d509ee63b3ce #NeCTAR Ubuntu 18.04 LTS (B
 instance_network: qh2-uom-internal
 instance_key_name: dev-testing
 #ansible_python_interpreter: /Library/Frameworks/Python.framework/Versions/3.7/bin/python3
-#ansible_python_interpreter: /Users/shuangqiu/.pyenv/versions/3.6.10/bin/python
+# ansible_python_interpreter: /Users/shuangqiu/.pyenv/versions/3.6.10/bin/python
 project_directory: /Users/shuangqiu/Desktop/COMP90024_Assignment_2/Ansible
-#ansible_ssh_private_key_file: ~/.ssh/dev-testing.pem
+
 # # For Volume Variables
 volumes:
   - vol_name: instance1-vol

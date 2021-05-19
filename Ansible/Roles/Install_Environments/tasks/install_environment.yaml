@@ -9,14 +9,19 @@
 - name: install dependencies
   become: yes
   apt:
-    name: ['vim','git','unzip','python3-pip','xfsprogs','ca-certificates','apt-transport-https','curl','python-setuptools','software-properties-common']
+    name: ['vim','git','unzip','python-pip','python3-pip','xfsprogs','ca-certificates','apt-transport-https','curl','python-setuptools','software-properties-common']
     state: latest
     install_recommends: no
     update_cache: yes
 
+- name: Install pexpect
+  become: yes
+  pip:
+    name: pexpect
+
 - name: add apt repository
   become: yes
-  shell: add-apt-repository ppa:ubuntugis/ppa
+  shell: yes '' | add-apt-repository ppa:ubuntugis/ppa
 
 - name: Install docker-ce
   become: yes
@@ -33,13 +38,6 @@
     state: latest
     install_recommends: no
     update_cache: yes
-
-# - name: Install docker-compose
-#   become: yes
-#   pip:
-#     name: ['docker-compose']
-#     version: 1.22.0
-#     state: present
 
 - name: Downloading the docker compose
   become: yes

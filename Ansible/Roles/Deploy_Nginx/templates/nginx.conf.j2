@@ -29,10 +29,12 @@ http {
     upstream myproject{
         ip_hash;
         server 127.0.0.1:8000;
+        server {{server2}}:8000;
+        server {{server3}}:8000;
     }
    server {
        listen      80;
-       server_name {{instance1}};
+       server_name {{ansible_host}};
        # Load configuration files for the default server block.
        #include /etc/nginx/default.d/*.conf;
         location ^~ /api {

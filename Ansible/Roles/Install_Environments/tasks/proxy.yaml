@@ -27,6 +27,12 @@
       Environment="HTTPS_PROXY={{ proxy_address }}"
       Environment="NO_PROXY=localhost,127.0.0.1,localaddress,172.16.0.0/12,.melbourne.rc.nectar.org.au,.storage.unimelb.edu.au,.cloud.unimelb.edu.au"
 
+- name: create docker config
+  become: yes
+  file:
+    path: ~/.docker
+    state: directory
+
 - name: add container config
   become: yes
   template:

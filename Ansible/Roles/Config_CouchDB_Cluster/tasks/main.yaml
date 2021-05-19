@@ -1,0 +1,23 @@
+---
+
+- name: add first node 1
+  become: yes
+  shell: |
+    curl -X POST -H "Content-Type: application/json" http://admin:admin@127.0.0.1:5984/_cluster_setup -d '{"action": "enable_cluster", "bind_address":"0.0.0.0", "username": "admin", "password":"admin", "port": 5984, "remote_node": "{{server2}}", "remote_current_user": "admin", "remote_current_password": "admin" }'
+
+- name: add first node 2
+  become: yes
+  shell: |
+    curl -X POST -H "Content-Type: application/json" http://admin:admin@127.0.0.1:5984/_cluster_setup -d '{"action": "add_node", "host":"{{server2}}", "port": "5984", "username": "admin", "password":"admin"}'
+- name: add second node 1
+  become: yes
+  shell: |
+    curl -X POST -H "Content-Type: application/json" http://admin:admin@127.0.0.1:5984/_cluster_setup -d '{"action": "enable_cluster", "bind_address":"0.0.0.0", "username": "admin", "password":"admin", "port": 5984, "remote_node": "{{server3}}", "remote_current_user": "admin", "remote_current_password": "admin" }'
+- name: add second node 2
+  become: yes
+  shell: |
+    curl -X POST -H "Content-Type: application/json" http://admin:admin@127.0.0.1:5984/_cluster_setup -d '{"action": "add_node", "host":"{{server3}}", "port": "5984", "username": "admin", "password":"admin"}'
+- name: finish setting cluster
+  become: yes
+  shell: |
+    curl -X POST -H "Content-Type: application/json" http://admin:admin@127.0.0.1:5984/_cluster_setup -d '{"action": "finish_cluster"}'

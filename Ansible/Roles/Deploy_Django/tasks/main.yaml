@@ -7,6 +7,10 @@
     dest: '{{ remote_working_directory }}'
     force: yes
 
+- name: install node modules
+  command:
+    cmd: npm install
+    chdir: '{{ frontend_directory }}'
 
 - name: generate dist file for frontend
   command:
