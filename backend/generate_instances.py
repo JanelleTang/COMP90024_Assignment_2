@@ -9,44 +9,46 @@ from django.core.exceptions import ObjectDoesNotExist
 import django
 import os
 
-
 ## ========================== Region Polygons ========================== #
 
 class CouchToInstances:
-    def __init__(self,path,geo_dict,model):
+    def __init__(self,path,geo_dict):
         self.URL = 'http://127.0.0.1:8000/api/location/'
         self.region_data = requests.get(self.URL+path).json()['obj']
-        update_model_data(self.region_data,geo_dict,model)
+        if path == 'city':
+            update_model_data(self.region_data,geo_dict,True)
+        else:
+            update_model_data(self.region_data,geo_dict,False)
 
+# def dict_to_df(data):
+#     results = []
+#     for row in data:
+#         for k,v in row.items():
+#             results.append(v)
 
-def dict_to_df(data):
-    results = []
-    for row in data:
-        for k,v in row.items():
-            results.append(v)
+#     df = pd.DataFrame(results)
+#     return df
 
-    df = pd.DataFrame(results)
-    return df
-
-def update_model_data(data,geom_dict,model):
+def update_model_data(data,geom_dict,is_city=True):
     for row in data:
         for k,v in row.items():
             try:
-                update_instance(v,geom_dict,model)
+                update_instance(v,geom_dict,is_city)
             except:
                 print('Something wrong with uploading: ',v)
 
-
-
 ## create model instances here
-def update_instance(data,geom_dict,model):
+def update_instance(data,geom_dict,is_city):
     pk = data['name']
+    if is_city:
+        model=City
+    else:
+        model=LGA
     try:
         obj = model.objects.get(name=pk)
         obj.sentiment_rank = get_sentiment_rank(data['total_sentiment'],data['total_tweets'])
         obj.sentiment_value = round(data['total_sentiment'],4)
         obj.n_tweets = data['total_tweets']
-
     except ObjectDoesNotExist:
         try:
             geom = convert_to_geom(geom_dict[pk])
@@ -54,15 +56,22 @@ def update_instance(data,geom_dict,model):
             print(pk+" does not exist in geojson")
             return None
         sent_rank = get_sentiment_rank(data['total_sentiment'],data['total_tweets'])
-        obj = model(name = pk,
-        state = data['state'],
-        polygon = geom,
-        sentiment_value = round(data['total_sentiment'],4),
-        sentiment_rank = sent_rank,
-        n_tweets = data['total_tweets'])
-
+        if is_city:
+            obj = model(name = pk,
+                    state = data['state'],
+                    polygon = geom,
+                    sentiment_value = round(data['total_sentiment'],4),
+                    sentiment_rank = sent_rank,
+                    n_tweets = data['total_tweets'])
+        else:
+            obj = model(name = pk,
+                state = data['state'],
+                city = data['city'],
+                polygon = geom,
+                sentiment_value = round(data['total_sentiment'],4),
+                sentiment_rank = sent_rank,
+                n_tweets = data['total_tweets'])
     obj.save()
-
 
 def convert_to_geom(obj):
     if type(obj) == str:
@@ -87,8 +96,6 @@ def get_sentiment_rank(sentiment,count):
     elif average_sent <=1:
         return 3
 
-
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
 django.setup()
 from locations.models import LGA,City
@@ -104,6 +111,6 @@ city_dict = {
     'hobart': 'POINT(147.3257 -42.8826)',
 }
 
-CouchToInstances("city",city_dict,City)
-CouchToInstances("lga",lga_dict,LGA)
+CouchToInstances("city",city_dict)
+CouchToInstances("lga",lga_dict)
     

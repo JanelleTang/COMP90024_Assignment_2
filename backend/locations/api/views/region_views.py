@@ -22,7 +22,6 @@ def create_region(request):
         for row in regions:
             try:
                 city_id = row['city'].replace(" ","-")
-                print('log init')
                 regions_db[city_id] = {'LGA':{row['lga']:row['aggregate_data']},
                                         'name':row['city'],
                                         'state':row['state'],
@@ -30,29 +29,23 @@ def create_region(request):
                                         'times':{row['time']:row['aggregate_data']},
                                         'total_sentiment':row['aggregate_data']['total_sentiment'],
                                         'total_tweets':1}
-                print('log2')
             except ResourceConflict:
-                print('log3')
                 doc = regions_db[city_id]
                 lga_id = row['lga']
-                print('log4')
-                print(doc)
+
                 #update existing LGA
                 if lga_id in doc['LGA']:
                     update_aggregate_data(doc['LGA'][lga_id],row['aggregate_data'])
                 else:
                     doc['LGA'][lga_id]=row['aggregate_data']
-                print(doc)
-                print('log5')
+
 
                 #update existing date
                 current_date = row['date']
                 if current_date in doc['dates']:
                     update_aggregate_data(doc['dates'][current_date],row['aggregate_data'])
-                    print('log2')
                 else:
                     doc['dates'][current_date]=row['aggregate_data']
-                    print('log1')
                 #update existing time
                 current_time = row['time']  
                 if current_time in doc['times']:
@@ -97,6 +90,7 @@ def get_lgas(request):
             for lga_id,lga_row in doc['LGA'].items():
                 aggregate_data = lga_row
                 aggregate_data['state'] = state_name
+                aggregate_data['city'] = city_id.replace(" ","-")
                 aggregate_data['name'] = lga_id
                 lga_data.append({lga_id.replace(" ","-"):aggregate_data})
         resp = ResponseMessage(200, "success", lga_data)

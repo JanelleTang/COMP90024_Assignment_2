@@ -70,6 +70,7 @@ export default {
 	this.runChart()
   },
   methods: {
+	// set the denominator for each metric
 	normalize: function(d, v) {
 		switch(v){
 			case 'renters': case 'owned': case 'being_purchased': case 'solar_panels': case 'solar_water_heaters':
@@ -94,6 +95,7 @@ export default {
 					label: "Melbourne",
 					borderColor: "black",
 					backgroundColor: data.map((d) => {
+					// highlight supplied dot label as red
 					return this.highlighted==d[0]?'red':'blue'}),
 					data: pointData,
 				}]
@@ -131,10 +133,12 @@ export default {
 				}
 			},
 			onClick : (mouse,item) => {
+				// on click return label to hightlight point
 				this.$emit("bubbleclick",this.newChartData['datasets'][0]['data'][item[0]['_index']]['label'])
 				this.runChart(this.newChartData['datasets'][0]['data'][item[0]['_index']]['label'])
 			}
 		}
+		// if any additional options passed apply them to options
 		this.extraOptions.forEach((d) => {
 			this.options[d.key] = d.values
 		})

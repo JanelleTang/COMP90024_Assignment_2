@@ -84,7 +84,7 @@ def get_raw_tweet_by_size(request, size=1000):
         tweet_data = []
         for row in tweets:
             doc = twitter_db[row.id]
-            doc.isProcessed = 1
+            doc['isProcessed'] = 1
             twitter_db.save(doc)
             tweet_data.append(couch_to_dict(row.id,['text','geo','location','hashtags','date_created'],row.value))
         resp = ResponseMessage(200, "success", tweet_data)

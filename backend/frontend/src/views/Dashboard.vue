@@ -64,6 +64,7 @@ export default {
 	chartdata: null,
 	linedata: null,
 	barTweets: null,
+	// 0 to 1 scale on this chart as all data is indexed to max and min values
 	barOptions: {
 		scales: {
 			
@@ -76,6 +77,7 @@ export default {
 			}
 		},
 	barProp: null,
+	// loaded variables keep charts from displaying before api data is returned
 	loaded: false,
 	loaded2: false,
 	extraOptions: null,
@@ -92,30 +94,36 @@ export default {
 	}
   }),
   async mounted() {
+	// initialize graphs with no object selected yet
 	this.loadGraphs('all')
   },
   methods: {
 	extent: function(values) {
 		try{
+			// return mins and maxes even if nulls in data
 			return [min(values.map(function(d) {return d==null?Infinity:d})),max(values.map(function(d) {return d==null?-Infinity:d}))]
 		} catch {
 			return [null,null]
 		}
 	},
+	// when a dot is selected in graph, change header, highlight in graph, and limit data in other graphs to only that subdivision
 	clickedbubble : function(value) {
 		this.titleHeader = value;
 		this.loadGraphs(value)
 	},
+	// used to check if demoninators are valid numbers
 	checkNum: function(x) {
 		return x>0?x:0
 	},
 	loadGraphs: function(lga) {
 	
 	this.loaded = false
+	// pull lga info and tweet data from apis and aurin data from static file
 	Promise.all([axios.get("api/location/lga"),require("@/assets/aurin.json"),
 				axios.get("api/location/dates")]).then((files) =>{
 		var chartdata = files[0]['data']['obj'].map((d) => {
 			var prop = Object.values(d)[0]
+			// lga data is - separated, convert to aurin space separated format
 			var aurinLGA = files[1][prop.name.split("-").join(" ")]
 			return {'lga' : prop.name,
 					'city' : prop.city,
@@ -159,11 +167,12 @@ export default {
 			})
 			return a
 		},{}))
+		// sort tweet data by date so renders properly on graphs
 		this.tweetData = this.tweetData.sort(function(a,b) {if(a[0]<b[0]){return -1}else{return 1}})
 		this.scatterOptions = []
 		this.linedata = {labels : this.tweetData.map((d) => {return d[0]}),
 			datasets: [{
-				label: 'Daily Tweets',
+				label: 'Tweet Sentiment',
 				data : Object.values(this.tweetData).map((d) => {return d[1]['total_sentiment']/d[1]['total_tweets']}),
 				fill: false,
 				borderColor: 'red',
@@ -176,6 +185,7 @@ export default {
 				borderColor: 'red',
 			}]
 		}
+		// get the min and max values by geographic subdivision for each factor
 		var minMax = {
 			'renters' : this.extent(this.chartdata.map((d) => {return d[1].total_homes>0?d[1].renters/d[1].total_homes:null})),
 			'owned' : this.extent(this.chartdata.map((d) => {return d[1].total_homes>0?d[1].owned/d[1].total_homes:null})),
@@ -185,9 +195,9 @@ export default {
 			'miners' : this.extent(this.chartdata.map((d) => {return d[1].industry>0?d[1].miners/d[1].industry:null})),
 			'solar_panels' : this.extent(this.chartdata.map((d) => {return d[1].total_homes>0?d[1].solar_panels/d[1].total_homes:null})),
 			'solar_water_heaters' : this.extent(this.chartdata.map((d) => {return d[1].total_homes>0?d[1].solar_water_heaters/d[1].total_homes:null})),
-			'income_3000' : this.extent(this.chartdata.map((d) => {return d[1].age_income_tot>0?d[1].income_3000/d[1].age_income_tot:null})),
-			'income_1250' : this.extent(this.chartdata.map((d) => {return d[1].age_income_tot>0?d[1].income_1250/d[1].age_income_tot:null})),
-			'age_35' : this.extent(this.chartdata.map((d) => {return d[1].age_income_tot>0?d[1].age_35/d[1].age_income_tot:null})),
+			'income_3000' : this.extent(this.chartdata.map((d) => {return d[1].age_income_total>0?d[1].income_3000/d[1].age_income_total:null})),
+			'income_1250' : this.extent(this.chartdata.map((d) => {return d[1].age_income_total>0?d[1].income_1250/d[1].age_income_total:null})),
+			'age_35' : this.extent(this.chartdata.map((d) => {return d[1].age_income_total>0?d[1].age_35/d[1].age_income_total:null})),
 			'multi_opinion' : this.extent(this.chartdata.map((d) => {return d[1].survey_pop>0?d[1].multi_opinion/d[1].survey_pop:null})),
 			'homeless' : this.extent(this.chartdata.map((d) => {return d[1].survey_pop>0?d[1].homeless/d[1].survey_pop:null})),
 			'aboriginal' : this.extent(this.chartdata.map((d) => {return d[1].survey_pop>0?d[1].aboriginal/d[1].survey_pop:null})),
@@ -195,91 +205,105 @@ export default {
 			'gaming' : this.extent(this.chartdata.map((d) => {return d[1].survey_pop>0?d[1].gaming/d[1].survey_pop:null})),
 			'students' : this.extent(this.chartdata.map((d) => {return d[1].survey_pop>0?d[1].students/d[1].survey_pop:null}))
 		}
+		// bar chart renders with x axis as all properties and y axis as 0 to 1 index
 		var barData = this.chartdata.filter((d) => {return d[0] == lga || lga == "all"})
 		console.log(barData)
 		console.log(minMax)
-		this.barProp = {labels : ['Renters','Owners','Being Purchased','Coal Miners','Gas Supply','Mining','Solar Panels','SOlar Water Heaters',
+		var barLabels = ['Renters','Owners','Being Purchased','Coal Miners','Gas Supply','Mining','Solar Panels','Solar Water Heaters',
 									'Income Over 3000','Income Under 1250','Age under 35','Multiculturalism Opinion','Homeless Rate','Aboriginal Origin',
-									'Pleasant COmmunity','Gaming Losses','Students'],
-			datasets: [{
-				label: 'Features',
-				data : [
+									'Pleasant COmmunity','Gaming Losses','Students']
+		var barFactorData = [
 					((sum(barData.map((d) => {return d[1].renters}))/sum(barData.map((d) => {return (d[1].total_homes)})))-minMax['renters'][0])/(minMax['renters'][1]-minMax['renters'][0]),
 					((sum(barData.map((d) => {return d[1].owned}))/
 					sum(barData.map((d) => {return (d[1].total_homes)})))-minMax['owned'][0])/(minMax['owned'][1]-minMax['owned'][0]),
 					((sum(barData.map((d) => {return d[1].being_purchased}))/
 					sum(barData.map((d) => {return (d[1].total_homes)})))-minMax['being_purchased'][0])/(minMax['being_purchased'][1]-minMax['being_purchased'][0]),
-					sum(barData.map((d) => {return (d.coal_miners?d.coal_miners:0)})) / sum(barData.map((d) => {return (d.industry?d.industry:0)})),
-					sum(barData.map((d) => {return (d.gas_supply?d.gas_supply:0)})) / sum(barData.map((d) => {return (d.industry?d.industry:0)})),
-					sum(barData.map((d) => {return (d.miners?d.miners:0)})) / sum(barData.map((d) => {return (d.industry?d.industry:0)})),
-					sum(barData.map((d) => {return d.solar_panels?d.solar_panels:0}))/
-					sum(barData.map((d) => {return (d.renters?d.renters:0)+(d.owned?d.owned:0)+(d.being_purchased?d.being_purchased:0)})),
-					sum(barData.map((d) => {return d.solar_water_heaters?d.solar_water_heaters:0}))/
-					sum(barData.map((d) => {return (d.renters?d.renters:0)+(d.owned?d.owned:0)+(d.being_purchased?d.being_purchased:0)})),
-					sum(barData.map((d) => {return d.income_3000?d.income_3000:0}))/
-					sum(barData.map((d) => {return (d.age_income_tot?d.age_income_tot:0)})),
-					sum(barData.map((d) => {return d.income_1250?d.income_1250:0}))/
-					sum(barData.map((d) => {return (d.age_income_tot?d.age_income_tot:0)})),
-					sum(barData.map((d) => {return d.age_35?d.age_35:0}))/
-					sum(barData.map((d) => {return (d.age_income_tot?d.age_income_tot:0)})),
-					sum(barData.map((d) => {return (d.multi_opinion&&d.age_income_tot)?d.multi_opinion*d.age_income_tot:0}))/
-					sum(barData.map((d) => {return (d.multi_opinion&&d.age_income_tot)?d.d.age_income_tot:0})),
-					sum(barData.map((d) => {return (d.homeless&&d.age_income_tot)?d.homeless*d.age_income_tot:0}))/
-					sum(barData.map((d) => {return (d.homeless&&d.age_income_tot)?d.d.age_income_tot:0})),
-					sum(barData.map((d) => {return (d.aboroiginal&&d.age_income_tot)?d.aboroiginal*d.age_income_tot:0}))/
-					sum(barData.map((d) => {return (d.aboroiginal&&d.age_income_tot)?d.d.age_income_tot:0})),
-					sum(barData.map((d) => {return (d.pleasant&&d.age_income_tot)?d.pleasant*d.age_income_tot:0}))/
-					sum(barData.map((d) => {return (d.pleasant&&d.age_income_tot)?d.d.age_income_tot:0})),
-					sum(barData.map((d) => {return (d.gaming&&d.age_income_tot)?d.gaming*d.age_income_tot:0}))/
-					sum(barData.map((d) => {return (d.gaming&&d.age_income_tot)?d.d.age_income_tot:0})),
-					sum(barData.map((d) => {return (d.students&&d.age_income_tot)?d.students*d.age_income_tot:0}))/
-					sum(barData.map((d) => {return (d.students&&d.age_income_tot)?d.d.age_income_tot:0}))
-						],
+					((sum(barData.map((d) => {return d[1].coal_miners}))/
+					sum(barData.map((d) => {return (d[1].industry)})))-minMax['coal_miners'][0])/(minMax['coal_miners'][1]-minMax['coal_miners'][0]),
+					((sum(barData.map((d) => {return d[1].gas_supply}))/
+					sum(barData.map((d) => {return (d[1].industry)})))-minMax['gas_supply'][0])/(minMax['gas_supply'][1]-minMax['gas_supply'][0]),
+					((sum(barData.map((d) => {return d[1].miners}))/
+					sum(barData.map((d) => {return (d[1].industry)})))-minMax['miners'][0])/(minMax['miners'][1]-minMax['miners'][0]),
+					((sum(barData.map((d) => {return d[1].solar_panels}))/
+					sum(barData.map((d) => {return (d[1].total_homes)})))-minMax['solar_panels'][0])/(minMax['solar_panels'][1]-minMax['solar_panels'][0]),
+					((sum(barData.map((d) => {return d[1].solar_water_heaters}))/
+					sum(barData.map((d) => {return (d[1].total_homes)})))-minMax['solar_water_heaters'][0])/(minMax['solar_water_heaters'][1]-minMax['solar_water_heaters'][0]),
+					((sum(barData.map((d) => {return d[1].income_3000}))/
+					sum(barData.map((d) => {return (d[1].age_income_total)})))-minMax['income_3000'][0])/(minMax['income_3000'][1]-minMax['income_3000'][0]),
+					((sum(barData.map((d) => {return d[1].income_1250}))/
+					sum(barData.map((d) => {return (d[1].age_income_total)})))-minMax['income_1250'][0])/(minMax['income_1250'][1]-minMax['income_1250'][0]),
+					((sum(barData.map((d) => {return d[1].age_35}))/
+					sum(barData.map((d) => {return (d[1].age_income_total)})))-minMax['age_35'][0])/(minMax['age_35'][1]-minMax['age_35'][0]),
+					((sum(barData.map((d) => {return d[1].multi_opinion}))/
+					sum(barData.map((d) => {return (d[1].survey_pop)})))-minMax['multi_opinion'][0])/(minMax['multi_opinion'][1]-minMax['multi_opinion'][0]),
+					((sum(barData.map((d) => {return d[1].homeless}))/
+					sum(barData.map((d) => {return (d[1].survey_pop)})))-minMax['homeless'][0])/(minMax['homeless'][1]-minMax['homeless'][0]),
+					((sum(barData.map((d) => {return d[1].aboriginal}))/
+					sum(barData.map((d) => {return (d[1].survey_pop)})))-minMax['aboriginal'][0])/(minMax['aboriginal'][1]-minMax['aboriginal'][0]),
+					((sum(barData.map((d) => {return d[1].pleasant}))/
+					sum(barData.map((d) => {return (d[1].survey_pop)})))-minMax['pleasant'][0])/(minMax['pleasant'][1]-minMax['pleasant'][0]),
+					((sum(barData.map((d) => {return d[1].gaming}))/
+					sum(barData.map((d) => {return (d[1].survey_pop)})))-minMax['gaming'][0])/(minMax['gaming'][1]-minMax['gaming'][0]),
+					((sum(barData.map((d) => {return d[1].students}))/
+					sum(barData.map((d) => {return (d[1].survey_pop)})))-minMax['students'][0])/(minMax['students'][1]-minMax['students'][0])
+						]
+		console.log(barFactorData);
+		// only plot properties that have information to display
+		barLabels = barLabels.filter(function(d,i) { return !Number.isNaN(barFactorData[i]);})
+		barFactorData = barFactorData.filter(function(d) {return !Number.isNaN(d);})
+		this.barProp = {labels : barLabels,
+			datasets: [{
+				label: 'Features',
+				data : barFactorData,
 				fill: false,
 				borderColor: 'red',
 			}]
 		}
 	}).then(() => {
+		// load charts when data has been retrieved
 		this.loaded = true
 		this.loaded2 = true
 	});
 	  
 	 
 	},
+	// get sums for grouping by key supplied
 	 groupBy : function (data,key) {
-		var obj = data.reduce(function (a,b) {
+		var obj = data.reduce((a,b) => {
 			if(b[key] in a) {
-				a[b[key]]['n_tweets'] += b['n_tweets']
-				a[b[key]]['sentiment_value'] += b['sentiment_value']
-				a[b[key]]['owned'] += b['owned']
-				a[b[key]]['renters'] += b['renters']
-				a[b[key]]['being_purchased'] += b['being_purchased']
-				a[b[key]]['total_homes'] += b['total_homes']
-				a[b[key]]['industry'] += b['industry']
-				a[b[key]]['coal_miners'] += b['coal_miners']
-				a[b[key]]['miners'] += b['miners']
-				a[b[key]]['gas_supply'] += b['gas_supply']
-				a[b[key]]['solar_panels'] += b['solar_panels']
-				a[b[key]]['solar_water_heaters'] += b['solar_water_heaters']
-				a[b[key]]['income_3000'] += b['income_3000']
-				a[b[key]]['income_1250'] += b['income_1250']
-				a[b[key]]['age_35'] += b['age_35']
-				a[b[key]]['age_income_total'] += b['age_income_total']
-				a[b[key]]['multi_opinion'] += b['multi_opinion']
-				a[b[key]]['homeless'] += b['homeless']
-				a[b[key]]['aboriginal'] += b['aboriginal']
-				a[b[key]]['pleasant'] += b['pleasant']
-				a[b[key]]['gaming'] += b['gaming']
-				a[b[key]]['students'] += b['students']
-				a[b[key]]['survey_pop'] += b['survey_pop']
+				a[b[key]]['n_tweets'] += this.checkNum(b['n_tweets'])
+				a[b[key]]['sentiment_value'] += this.checkNum(b['sentiment_value'])
+				a[b[key]]['owned'] += this.checkNum(b['owned'])
+				a[b[key]]['renters'] += this.checkNum(b['renters'])
+				a[b[key]]['being_purchased'] += this.checkNum(b['being_purchased'])
+				a[b[key]]['total_homes'] += this.checkNum(b['total_homes'])
+				a[b[key]]['industry'] += this.checkNum(b['industry'])
+				a[b[key]]['coal_miners'] += this.checkNum(b['coal_miners'])
+				a[b[key]]['miners'] += this.checkNum(b['miners'])
+				a[b[key]]['gas_supply'] += this.checkNum(b['gas_supply'])
+				a[b[key]]['solar_panels'] += this.checkNum(b['solar_panels'])
+				a[b[key]]['solar_water_heaters'] += this.checkNum(b['solar_water_heaters'])
+				a[b[key]]['income_3000'] += this.checkNum(b['income_3000'])
+				a[b[key]]['income_1250'] += this.checkNum(b['income_1250'])
+				a[b[key]]['age_35'] += this.checkNum(b['age_35'])
+				a[b[key]]['age_income_total'] += this.checkNum(b['age_income_total'])
+				a[b[key]]['multi_opinion'] += this.checkNum(b['multi_opinion'])
+				a[b[key]]['homeless'] += this.checkNum(b['homeless'])
+				a[b[key]]['aboriginal'] += this.checkNum(b['aboriginal'])
+				a[b[key]]['pleasant'] += this.checkNum(b['pleasant'])
+				a[b[key]]['gaming'] += this.checkNum(b['gaming'])
+				a[b[key]]['students'] += this.checkNum(b['students'])
+				a[b[key]]['survey_pop'] += this.checkNum(b['survey_pop'])
 			} else {
-				a[b[key]] = {'n_tweets' : b['n_tweets'], 'sentiment_value' : b['sentiment_value'], 'owned' :  b['owned'], 'renters' : b['renters'],
-				'being_purchased' : b['being_purchased'], 'total_homes' : b['total_homes'],
-				'industry' : b['industry'], 'coal_miners' : b['coal_miners'], 
-				'miners' : b['miners'], 'gas_supply' : b['gas_supply'], 'solar_panels' : b['solar_panels'], 'solar_water_heaters' : b['solar_water_heaters'], 
-				'income_3000' : b['income_3000'], 'income_1250' : b['income_1250'], 'age_35' : b['age_35'], 'age_income_total' : b['age_income_total'], 
-				'multi_opinion' : b['multi_opinion'], 'homeless' : b['homeless'], 'aboriginal' : b['aboriginal'], 'pleasant' : b['pleasant'], 
-				'gaming' : b['gaming'], 'students' : b['students'], 'survey_pop' : b['survey_pop']
+				a[b[key]] = {'n_tweets' : this.checkNum(b['n_tweets']), 'sentiment_value' : this.checkNum(b['sentiment_value']), 
+				'owned' :  this.checkNum(b['owned']), 'renters' : this.checkNum(b['renters']),'being_purchased' : this.checkNum(b['being_purchased']), 
+				'total_homes' : this.checkNum(b['total_homes']),'industry' : this.checkNum(b['industry']), 'coal_miners' : this.checkNum(b['coal_miners']), 
+				'miners' : this.checkNum(b['miners']), 'gas_supply' : this.checkNum(b['gas_supply']), 'solar_panels' : this.checkNum(b['solar_panels']), 
+				'solar_water_heaters' : this.checkNum(b['solar_water_heaters']),'income_3000' : this.checkNum(b['income_3000']), 
+				'income_1250' : this.checkNum(b['income_1250']), 'age_35' : this.checkNum(b['age_35']), 'age_income_total' : this.checkNum(b['age_income_total']), 
+				'multi_opinion' : this.checkNum(b['multi_opinion']), 'homeless' : this.checkNum(b['homeless']), 'aboriginal' : this.checkNum(b['aboriginal']), 
+				'pleasant' : this.checkNum(b['pleasant']),'gaming' : this.checkNum(b['gaming']), 
+				'students' : this.checkNum(b['students']), 'survey_pop' : this.checkNum(b['survey_pop'])
 				}
 			}
 			return a
