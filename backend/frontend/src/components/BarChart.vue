@@ -6,7 +6,6 @@ export default {
   data: () => ({
   }),
   mounted() {
-	console.log(this.options)
    this.renderChart(this.chartData, this.options)
   }
  }
