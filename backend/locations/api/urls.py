@@ -17,6 +17,7 @@ urlpatterns = [
                                                                                 'total_sentiment',
                                                                                 'sentiment_rank',
                                                                                 'state',
+                                                                                'city',
                                                                                 'total_tweets']), name='data'),
     url(r'^city_data.geojson$', RegionGeoJSONAPIView.as_view(model=City,properties=['name',
                                                                             'total_sentiment',
