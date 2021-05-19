@@ -1,6 +1,6 @@
 ---
 
-- hosts: instance1
+- hosts: instance1,instance2,instance3
   vars_files:
     - Variables/CouchDB_variables.yaml
   gather_facts: true

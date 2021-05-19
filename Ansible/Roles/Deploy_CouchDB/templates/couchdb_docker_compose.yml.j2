@@ -1,1 +1,9 @@
--- TO DO
+version: "3"
+services:
+  couchdb:
+    ports:
+      - '5984:5984'
+    volumes:
+      - /home/ubuntu/config/local.ini:/opt/bitnami/couchdb/etc/local.ini
+      - /home/ubuntu/config/vm.args:/opt/bitnami/couchdb/etc/vm.args
+      - /data:/bitnami/couchdb
