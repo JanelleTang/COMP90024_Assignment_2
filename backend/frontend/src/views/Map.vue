@@ -53,8 +53,8 @@ import Sidebar from "@/components/Sidebar"
           return {
               center: [144.9631, -37.8136],
               zoom: 9,
-              lga_geodata: "http://127.0.0.1:8000/api/lga_data.geojson",
-              city_geodata: "http://127.0.0.1:8000/api/city_data.geojson",
+              lga_geodata: "http://172.26.128.53/api/lga_data.geojson",
+              city_geodata: "http://172.26.128.53/api/city_data.geojson",
               locations: [["Melbourne", 144.9631,-37.8136],
               ["Sydney",151.2093,-33.8688],
               ["Adelaide",138.6007,-34.9285],
