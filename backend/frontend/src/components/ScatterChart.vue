@@ -54,6 +54,52 @@
 <script>
 //import axios from "axios";
 import BubbleChart from "@/components/scatter.js"
+
+
+function tooltipText(d,xVar,yVar) {
+		var returnArray = [d['label']]
+		var varArray = [xVar,yVar]
+		var varsUsed = [xVar,yVar]
+		varArray.forEach((e) => {
+			returnArray.push(e+": "+Math.round(+d['data'][e]*100)/100)
+			console.log(e)
+			switch(e){
+			case 'renters': case 'owned': case 'being_purchased': case 'solar_panels': case 'solar_water_heaters':
+				console.log("test1")
+				if(!varsUsed.includes('total_homes')){
+					console.log("test 2")
+					returnArray.push("Total Homes: "+Math.round(+d['data']['total_homes']))
+					varsUsed.push('total_homes')
+				}
+				break;
+			case 'coal_miners': case 'miners': case 'gas_supply':
+				if(!varsUsed.includes('industry')){
+					returnArray.push("Industry Total: "+Math.round(+d['data']['industry']))
+					varsUsed.push('industry')
+				}
+				break;
+			case 'income_3000': case 'income_1250': case 'age_35':
+				if(!varsUsed.includes('age_income_total')){
+					returnArray.push("Total Population: "+Math.round(+d['data']['age_income_total']))
+					varsUsed.push('age_income_total')
+				}
+				break;
+			case 'multi_opinion': case 'homeless': case 'aboriginal': case 'gaming': case 'pleasant': case 'students':
+				if(!varsUsed.includes('survey_pop')){
+					returnArray.push("Survey Population: "+Math.round(+d['data']['survey_pop']))
+					varsUsed.push('survey_pop')
+				}
+				break;
+			case 'sentiment_value':
+				if(!varsUsed.includes('n_tweets')){
+					returnArray.push("Tweet Count: "+Math.round(+d['data']['n_tweets']))
+					varsUsed.push('n_tweets')
+				}
+				break;
+		}
+		})
+		return returnArray;
+	}
 export default {
   name: "BubbleChartContainer",
   components : {BubbleChart},
@@ -76,11 +122,13 @@ export default {
 			case 'renters': case 'owned': case 'being_purchased': case 'solar_panels': case 'solar_water_heaters':
 				return +d[v]/+d['total_homes']
 			case 'coal_miners': case 'miners': case 'gas_supply':
-				return +d[v]/+d['total_industry']
+				return +d[v]/+d['industry']
 			case 'income_3000': case 'income_1250': case 'age_35':
 				return +d[v]/+d['age_income_total']
 			case 'multi_opinion': case 'homeless': case 'aboriginal': case 'gaming': case 'pleasant': case 'students':
 				return +d[v]/+d['survey_pop']
+			case 'sentiment_value':
+				return +d[v]/+d['n_tweets']
 			default:
 				return +d[v]
 		}
@@ -88,7 +136,7 @@ export default {
 	chartDataFormat: function(data, xVar, yVar) {
 			data = data.filter((d) => { return xVar in d[1] && yVar in d[1];})
 			var pointData =  data.map((d) => {return {'x' : this.normalize(d[1],xVar), 'y' : this.normalize(d[1],yVar), 'r' : 10,
-				'label' : d[0]} })
+				'label' : d[0], 'data' : d[1]} })
 			return {
 				datasets: [{
 					//label for entire dataset
@@ -128,8 +176,9 @@ export default {
 			tooltips : {
 				callbacks: {
 					// specify label on mouseover tooltip
-					label : function(item,data) {
-					return data['datasets'][0]['data'][item['index']]['label']}
+					label : ((item,data) => {
+					console.log(data);
+					return tooltipText(data['datasets'][0]['data'][item['index']],this.xSelect,this.ySelect)})
 				}
 			},
 			onClick : (mouse,item) => {
