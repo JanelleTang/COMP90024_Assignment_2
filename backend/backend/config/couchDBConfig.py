@@ -1,6 +1,6 @@
 class CouchDBConfig:
     domain = "127.0.0.1"
-    domains = ['172.26.128.53', '172.26.133.176', '172.26.133.116']
+    domains = ['172.26.134.122', '172.26.133.17', '172.26.133.243']
     username = "admin"
     password = "admin"
     port = "5984"
