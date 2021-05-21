@@ -32,16 +32,10 @@ def create_raw_tweet(request):
                 twitter_db[tweet_id] = tweet
             except ResourceConflict:
                 print("tweet {} is duplicate.".format(tweet_id))
-        # response_list = twitter_db.update(tweets)
-        # for success, docid, rev in response_list:
-        #     if not success:
-        #         print("duplicate")
-        #         resp = ResponseMessage(500, "saving tweets failed", None)
-        #         return resp.response()
         resp = ResponseMessage(200, "success", None)
     except Exception as e:
         logger.info(e)
-        resp = ResponseMessage(500, "saving tweets failed", None)
+        resp = ResponseMessage(500, "saving tweets failed:\n"+str(e), None)
     return resp.response()
 
 @require_http_methods(['POST'])
@@ -58,7 +52,7 @@ def update_raw_tweet(request, pk=None):
     except Exception as e:
         logger.error("Unable to delete {} tweet data".format(pk))
         logger.error(e)
-        resp = ResponseMessage(500, "Fail", None)
+        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
     return resp.response()
 
 @require_http_methods(['GET'])
@@ -72,7 +66,7 @@ def delete_raw_tweet_by_id(request, pk=None):
     except Exception as e:
         logger.error("Unable to delete {} tweet data".format(pk))
         logger.error(e)
-        resp = ResponseMessage(500, "Fail", None)
+        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
     return resp.response()
 
 @require_http_methods(['GET'])
@@ -91,7 +85,7 @@ def get_raw_tweet_by_size(request, size=1000):
     except Exception as e:
         logger.error("Unable to get the raw tweet data")
         logger.error(e)
-        resp = ResponseMessage(500, "fail", None)
+        resp = ResponseMessage(500, "fail:\n"+str(e), None)
     return resp.response()
 
 
@@ -116,7 +110,7 @@ def create_tweet_times(request):
         resp = ResponseMessage(200, "success", None)
     except Exception as e:
         logger.info(e)
-        resp = ResponseMessage(500, "saving time data failed", None)
+        resp = ResponseMessage(500, "saving time data failed:\n"+str(e), None)
     return resp.response()
 
 @require_http_methods(['POST'])
@@ -139,7 +133,7 @@ def create_tweet_dates(request):
         resp = ResponseMessage(200, "success", None)
     except Exception as e:
         logger.info(e)
-        resp = ResponseMessage(500, "saving date data failed", None)
+        resp = ResponseMessage(500, "saving date data failed:\n"+str(e), None)
     return resp.response()
 
 @require_http_methods(['GET'])
@@ -157,7 +151,7 @@ def get_tweet_times(request,pk):
     except Exception as e:
         logger.error("Unable to get location data 1")
         logger.error(e)
-        resp = ResponseMessage(500, "fail", None)
+        resp = ResponseMessage(500, "fail:\n"+str(e), None)
     return resp.response()
 
 @require_http_methods(['GET'])
@@ -176,5 +170,5 @@ def get_tweet_dates(request,pk):
     except Exception as e:
         logger.error("Unable to get location data 1")
         logger.error(e)
-        resp = ResponseMessage(500, "fail", None)
+        resp = ResponseMessage(500, "fail:\n"+str(e), None)
     return resp.response()

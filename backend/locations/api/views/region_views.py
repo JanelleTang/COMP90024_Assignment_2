@@ -58,7 +58,7 @@ def create_region(request):
         resp = ResponseMessage(200, "success", None)
     except Exception as e:
         logger.info(e)
-        resp = ResponseMessage(500, "saving regions2 failed", None)
+        resp = ResponseMessage(500, "saving regions2 failed:\n"+str(e), None)
     return resp.response()
 
 
@@ -75,7 +75,7 @@ def get_cities(request):
     except Exception as e:
         logger.error("Unable to get location data 1")
         logger.error(e)
-        resp = ResponseMessage(500, "fail", None)
+        resp = ResponseMessage(500, "fail:\n"+str(e), None)
     return resp.response()
 
 @require_http_methods(['GET'])
@@ -97,7 +97,7 @@ def get_lgas(request):
     except Exception as e:
         logger.error("Unable to get location data 1")
         logger.error(e)
-        resp = ResponseMessage(500, "fail", None)
+        resp = ResponseMessage(500, "fail:\n"+str(e), None)
     return resp.response()
 
 @require_http_methods(['GET'])
@@ -111,7 +111,7 @@ def get_city_detail(request,pk):
     except Exception as e:
         logger.error("Unable to get {} data".format(pk))
         logger.error(e)
-        resp = ResponseMessage(500, "Fail", None)
+        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
     return resp.response()
 
 @require_http_methods(['DELETE'])    
@@ -125,7 +125,7 @@ def delete_city_detail(request,pk):
     except Exception as e:
         logger.error("Unable to delete {} data".format(pk))
         logger.error(e)
-        resp = ResponseMessage(500, "Fail", None)
+        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
     return resp.response()
 
 
@@ -142,7 +142,7 @@ def get_all_dates(request):
         resp = ResponseMessage(200, "Success", dates_data)
     except Exception as e:
         logger.error(e)
-        resp = ResponseMessage(500, "Fail", None)
+        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
     return resp.response()
 
 @require_http_methods(['GET'])
@@ -158,7 +158,7 @@ def get_all_times(request):
         resp = ResponseMessage(200, "Success", times_data)
     except Exception as e:
         logger.error(e)
-        resp = ResponseMessage(500, "Fail", None)
+        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
     return resp.response()
 
 @require_http_methods(['GET'])
@@ -174,7 +174,7 @@ def get_city_dates(request,pk):
     except Exception as e:
         logger.error("Unable to get {} data".format(pk))
         logger.error(e)
-        resp = ResponseMessage(500, "Fail", None)
+        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
     return resp.response()
 
 @require_http_methods(['GET'])
@@ -188,5 +188,5 @@ def get_city_times(request,pk):
     except Exception as e:
         logger.error("Unable to get {} data".format(pk))
         logger.error(e)
-        resp = ResponseMessage(500, "Fail", None)
+        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
     return resp.response()
