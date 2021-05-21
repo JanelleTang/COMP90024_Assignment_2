@@ -53,8 +53,8 @@ import Sidebar from "@/components/Sidebar"
           return {
               center: [144.9631, -37.8136],
               zoom: 9,
-              lga_geodata: "http://172.26.128.53/api/lga_data.geojson",
-              city_geodata: "http://172.26.128.53/api/city_data.geojson",
+              lga_geodata: "api/lga_data.geojson",
+              city_geodata: "api/city_data.geojson",
               locations: [["Melbourne", 144.9631,-37.8136],
               ["Sydney",151.2093,-33.8688],
               ["Adelaide",138.6007,-34.9285],
@@ -192,6 +192,24 @@ import Sidebar from "@/components/Sidebar"
                         'circle-opacity': 0.6,
                         },
                   });
+				  
+				  this.map.on('click', 'city-circle', (e) => {
+                    new Mapbox.Popup({closeOnClick: true,offset: 5})
+                    .setLngLat(e.lngLat)
+                    .setHTML(e.features[0].properties.name)
+
+                    .addTo(this.map);
+                    });
+                    
+                    // Change the cursor to a pointer when the mouse is over the states layer.
+                    this.map.on('mouseenter', 'city-circle', () => {
+                    this.map.getCanvas().style.cursor = 'pointer';
+                    });
+                    
+                    // Change it back to a pointer when it leaves.
+                    this.map.on('mouseleave', 'city-circle', () => {
+                    this.map.getCanvas().style.cursor = '';
+                    });
             });
           },
           boundingBoxAU(){
@@ -223,6 +241,7 @@ import Sidebar from "@/components/Sidebar"
   }
 </script>
 <style>
+
 #map-container{
     padding: 0; 
     margin: 0; 
@@ -259,5 +278,7 @@ position: absolute;
     font-size:0em;
 
 }
+
+.mapboxgl-popup{position:absolute;top:0;left:0;display:flex;will-change:transform;pointer-events:none}.mapboxgl-popup-anchor-top,.mapboxgl-popup-anchor-top-left,.mapboxgl-popup-anchor-top-right{flex-direction:column}.mapboxgl-popup-anchor-bottom,.mapboxgl-popup-anchor-bottom-left,.mapboxgl-popup-anchor-bottom-right{flex-direction:column-reverse}.mapboxgl-popup-anchor-left{flex-direction:row}.mapboxgl-popup-anchor-right{flex-direction:row-reverse}.mapboxgl-popup-tip{width:0;height:0;border:10px solid transparent;z-index:1}.mapboxgl-popup-anchor-top .mapboxgl-popup-tip{align-self:center;border-top:none;border-bottom-color:#fff}.mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip{align-self:flex-start;border-top:none;border-left:none;border-bottom-color:#fff}.mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip{align-self:flex-end;border-top:none;border-right:none;border-bottom-color:#fff}.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip{align-self:center;border-bottom:none;border-top-color:#fff}.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip{align-self:flex-start;border-bottom:none;border-left:none;border-top-color:#fff}.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip{align-self:flex-end;border-bottom:none;border-right:none;border-top-color:#fff}.mapboxgl-popup-anchor-left .mapboxgl-popup-tip{align-self:center;border-left:none;border-right-color:#fff}.mapboxgl-popup-anchor-right .mapboxgl-popup-tip{align-self:center;border-right:none;border-left-color:#fff}.mapboxgl-popup-close-button{position:absolute;right:0;top:0;border:0;border-radius:0 3px 0 0;cursor:pointer;background-color:transparent}.mapboxgl-popup-close-button:hover{background-color:rgba(0,0,0,.05)}.mapboxgl-popup-content{position:relative;background:#fff;border-radius:3px;box-shadow:0 1px 2px rgba(0,0,0,.1);padding:10px 10px 15px;pointer-events:auto}.mapboxgl-popup-anchor-top-left .mapboxgl-popup-content{border-top-left-radius:0}.mapboxgl-popup-anchor-top-right .mapboxgl-popup-content{border-top-right-radius:0}.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-content{border-bottom-left-radius:0}.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-content{border-bottom-right-radius:0}.mapboxgl-popup-track-pointer{display:none}.mapboxgl-popup-track-pointer *{pointer-events:none;user-select:none}.mapboxgl-map:hover .mapboxgl-popup-track-pointer{display:flex}.mapboxgl-map:active .mapboxgl-popup-track-pointer{display:none}.mapboxgl-marker{position:absolute;top:0;left:0;will-change:transform;opacity:1;transition:opacity .2s}.mapboxgl-marker-occluded{opacity:.2}.mapboxgl-user-location-dot,.mapboxgl-user-location-dot:before{background-color:#1da1f2;width:15px;height:15px;border-radius:50%}.mapboxgl-user-location-dot:before{content:"";position:absolute;animation:mapboxgl-user-location-dot-pulse 2s infinite}.mapboxgl-user-location-dot:after{border-radius:50%;border:2px solid #fff;content:"";height:19px;left:-2px;position:absolute;top:-2px;width:19px;box-sizing:border-box;box-shadow:0 0 3px rgba(0,0,0,.35)}@keyframes mapboxgl-user-location-dot-pulse{0%{transform:scale(1);opacity:1}70%{transform:scale(3);opacity:0}to{transform:scale(1);opacity:0}}.mapboxgl-user-location-dot-stale{background-color:#aaa}.mapboxgl-user-location-dot-stale:after{display:none}.mapboxgl-user-location-accuracy-circle{background-color:rgba(29,161,242,.2);width:1px;height:1px;border-radius:100%}.mapboxgl-crosshair,.mapboxgl-crosshair .mapboxgl-interactive,.mapboxgl-crosshair .mapboxgl-interactive:active{cursor:crosshair}.mapboxgl-boxzoom{position:absolute;top:0;left:0;width:0;height:0;background:#fff;border:2px dotted #202020;opacity:.5}@media print{.mapbox-improve-map{display:none}}
 
 </style>

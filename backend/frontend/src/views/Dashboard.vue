@@ -144,17 +144,17 @@ export default {
 					'income_1250' : aurinLGA?this.checkNum(aurinLGA['weekly_income_under_1250']):0,
 					'age_35' : aurinLGA?this.checkNum(aurinLGA['age_under_35']):0,
 					'age_income_total' : aurinLGA?this.checkNum(aurinLGA['age_income_tot']):0,
-					'multi_opinion' : aurinLGA?this.checkNum(aurinLGA['multiculturalism_opinion']*aurinLGA['age_income_tot']):0,
-					'homeless' : aurinLGA?this.checkNum(aurinLGA['homeless_perc']*aurinLGA['age_income_tot']):0,
-					'aboriginal' : aurinLGA?this.checkNum(aurinLGA['aboriginal_origin']*aurinLGA['age_income_tot']):0,
-					'pleasant' : aurinLGA?this.checkNum(aurinLGA['pleasant_community']*aurinLGA['age_income_tot']):0,
-					'gaming' : aurinLGA?this.checkNum(aurinLGA['gaming_losses']*aurinLGA['age_income_tot']):0,
-					'students' : aurinLGA?this.checkNum(aurinLGA['students']*aurinLGA['age_income_tot']):0,
+					'multi_opinion' : aurinLGA?this.checkNum(aurinLGA['multiculturalism_opinion']*aurinLGA['age_income_tot']/100):0,
+					'homeless' : aurinLGA?this.checkNum(aurinLGA['homeless_perc']*aurinLGA['age_income_tot']/100):0,
+					'aboriginal' : aurinLGA?this.checkNum(aurinLGA['aboriginal_origin']*aurinLGA['age_income_tot']/100):0,
+					'pleasant' : aurinLGA?this.checkNum(aurinLGA['pleasant_community']*aurinLGA['age_income_tot']/100):0,
+					'gaming' : aurinLGA?this.checkNum(aurinLGA['gaming_losses']*aurinLGA['age_income_tot']/100):0,
+					'students' : aurinLGA?this.checkNum(aurinLGA['students']):0,
 					'survey_pop' : aurinLGA?this.checkNum((aurinLGA['students']?aurinLGA['age_income_tot']:0)):0
 				}
 		});
 		
-		this.chartdata = this.groupBy(chartdata,'state')
+		this.chartdata = this.groupBy(chartdata,'city')
 		
 		this.tweetData = Object.entries(files[2].data.obj.filter(function(d) {return d.name == lga || lga == 'all'}).reduce(function(a,b) {
 			Object.entries(b['dates']).forEach(function(d) {
