@@ -1,5 +1,3 @@
-# COMP90024 Project - Team 27
-
 ---
 - hosts: localhost
   vars_files:

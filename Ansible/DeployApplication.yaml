@@ -1,5 +1,4 @@
 ---
-
 - hosts: instance1,instance2,instance3
   vars_files:
     - Variables/CouchDB_variables.yaml
@@ -32,11 +31,10 @@
   roles:
     - role: Deploy_Nginx
 
-
-# - hosts: instance4
-#   vars_files:
-#     - Variables/Environment_variables.yaml
-#   gather_facts: true
-#   roles:
-#     - role: Deploy_Crawler
-#     - role: Deploy_Sentiment_Analyser
+- hosts: instance4
+  vars_files:
+    - Variables/Environment_variables.yaml
+  gather_facts: true
+  roles:
+    - role: Deploy_Crawler
+    - role: Deploy_Sentiment_Analyser

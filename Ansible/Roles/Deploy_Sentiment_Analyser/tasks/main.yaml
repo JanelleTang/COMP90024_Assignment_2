@@ -1,0 +1,4 @@
+---
+- name: run docker compose
+  become: yes
+  command: echo "success"
