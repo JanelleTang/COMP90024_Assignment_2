@@ -79,23 +79,20 @@ def sendTweets(tweets_for_submission):
         response = upload(tweets_for_submission,'/api/tweet/raw/create') 
         print(response.code)
 
-        '''
-        if os.path.isfile('StreamtweetDump.json') and os.path.getsize('StreamtweetDump.json') > 0:
-            with open('StreamtweetDump.json') as file:
-                data = json.load(file)
-                data.extend(tweets_for_submission)
-                file.close()
+    if tweets_for_submission:
+        tweet_lst = []
+        for tweet in tweets_for_submission:
+            t = {"id": str(tweet['tweet id']), 
+                "text":tweet["text"], 
+                "location":tweet["user location"], 
+                "hashtags":tweet["hashtags"],
+                "date_created":tweet['created at']}
+            if tweet["geo"] == None:
+                t["geo"] = ""
+            tweet_lst.append(t)
 
-                with open('StreamtweetDump.json', 'w') as outfile:
-                    tweet_df = pd.DataFrame(data)
-                    json.dump(data, outfile, default=str, indent=4)
-                    outfile.close()
-                    tweet_df.to_excel('streamingDumpWithCrawler.xlsx', index = False)
-        else:
-            with open('StreamtweetDump.json', 'w') as outfile:
-                json.dump(tweets_for_submission, outfile, default=str, indent=4)
-                outfile.close()
-        '''
+        response = upload({"data": tweet_lst},'/api/tweet/raw/create') 
+        print(response.text)
 
         now = datetime.now()
 
