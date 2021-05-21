@@ -19,6 +19,8 @@ for tweet in data:
     if tweet["geo"] == None:
         t["geo"] = ""
     tweets.append(t)
-tweets = {"data":tweets}
-response = upload(tweets, "/api/tweet/raw/create")
-print(response)
+
+start = 0
+for i in range(len(tweets) // 100):
+    response = upload({"data": tweets[start: start + 100]}, "/api/tweet/raw/create")
+    start += 100
