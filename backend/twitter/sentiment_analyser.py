@@ -61,7 +61,7 @@ class CleanTweet:
         """
         try:
             if coordinates:
-                location = geolocator.reverse(""+str(input[0])+str(input[1]),addressdetails=True,timeout=1000)
+                location = geolocator.reverse(""+str(input[1])+", "+str(input[0]),addressdetails=True,timeout=1000)
                 print('coordinates location {}'.location)
             else:    
                 location = geolocator.geocode(input,addressdetails=True,timeout=1000)
