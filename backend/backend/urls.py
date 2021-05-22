@@ -22,5 +22,6 @@ from backend import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',include('locations.api.urls')),
+    path('location/',include('locations.urls')),
     re_path(r"^.*$", views.index, name='vue-index')
 ]
