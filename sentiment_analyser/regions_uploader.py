@@ -1,4 +1,4 @@
-from twitter_crawler.uploader import upload
+from uploader import upload
 from sentiment_analyser import *
 from datetime import datetime
 import requests
