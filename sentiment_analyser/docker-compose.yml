@@ -3,4 +3,4 @@ services:
   app:
     restart: always
     build: .  
-    command: "cd sentiment_analyser && python3 regions_uploader.py"
+    command: "python3 regions_uploader.py"
