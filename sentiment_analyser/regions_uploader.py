@@ -1,9 +1,9 @@
-from uploader import upload
 from sentiment_analyser import *
 from datetime import datetime
 import requests
 import sys
 from time import sleep
+from uploader import upload
 
 ## Processing and aggregating tweets ##
 def tweet_processor(tweets):
