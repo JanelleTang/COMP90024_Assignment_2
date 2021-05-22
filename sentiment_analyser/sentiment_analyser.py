@@ -10,6 +10,7 @@ from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
 
 nltk.download('stopwords')
+nltk.download('vader_lexicon')
 sia = SentimentIntensityAnalyzer()
 geolocator = Nominatim(user_agent="tweets")
 stemmer = PorterStemmer()
