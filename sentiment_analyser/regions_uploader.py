@@ -46,11 +46,13 @@ if __name__ == '__main__':
         while True:
             try:
                 print("Restarting regions uploader...")
-                tweets = requests.get(path+'/api/tweet/raw/100').json()['obj']
+                tweets = requests.get(URL +'/api/tweet/raw/100').json()['obj']
                 regions_data = tweet_processor(tweets)
                 dict_uploader(regions_data,"/api/location/create")
                 print("Creating Model Instances...")
-                requests.get(path+"/location/update")
+                requests.get(URL+"/location/update/city")
+                sleep(10)
+                requests.get(URL+"/location/update/lga")
                 sleep(1800)
             except requests.exceptions.ConnectionError:
                 print("Connection Error. Please Wait...")

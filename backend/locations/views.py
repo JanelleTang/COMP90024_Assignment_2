@@ -17,13 +17,10 @@ from backend.utils.common import *
 
 
 @require_http_methods(['GET'])
-def update_model_instances(requests):
-    path = 'http://127.0.0.1:8000/api/location/'
+def update_city_instances(requests):
+    path = 'http://172.26.134.122/api/location/city'
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
     django.setup()
-
-    with open('locations/data/shapefiles/combined_lga_data.json') as f:
-        lga_dict = json.load(f)
 
     city_dict = {
         'melbourne':'POINT(144.9631 -37.8136)',
@@ -32,17 +29,38 @@ def update_model_instances(requests):
         'adelaide':'POINT(138.6007 -34.9285)',
         'perth': 'POINT(115.8613 -31.9523)',
         'hobart': 'POINT(147.3257 -42.8826)',
+        'ballarat': 'POINT(143.8503 -37.5622)',
+        'cairns':'POINT(145.7710 -16.9203)',
+        'newcastle': 'POINT(151.7817 -32.9283)'
     }
     try:
-        CouchToInstances(path+"city",city_dict,True)
-        sleep(10)
-        CouchToInstances(path+"lga",lga_dict,False)
+        CouchToInstances(path,city_dict,True)
+        print("Cities updated.")
         
     except Exception as e:
         logger.info(e)
         resp = ResponseMessage(500, "Updating model instances failed. Try Again.", None)
     resp = ResponseMessage(200, "success", None)
     return resp.response()
+
+def update_lga_instances(requests):
+    path = 'http://172.26.134.122/api/location/lga'
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
+    django.setup()
+
+    with open('locations/data/shapefiles/combined_lga_data.json') as f:
+        lga_dict = json.load(f)
+
+    try:
+        CouchToInstances(path,lga_dict,False)
+        print("LGAs updated.")
+        
+    except Exception as e:
+        logger.info(e)
+        resp = ResponseMessage(500, "Updating model instances failed. Try Again.", None)
+    resp = ResponseMessage(200, "success", None)
+    return resp.response()
+
 
 ## ========================== Region Polygons ========================== #
 def CouchToInstances(path,geo_dict,isCity):
