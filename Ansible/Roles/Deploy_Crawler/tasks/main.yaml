@@ -1,4 +1,14 @@
 ---
-- name: run docker compose
+- name: pull latest code from git
+  git:
+    repo: ssh://git@github.com/JanelleTang/COMP90024_Assignment_2.git
+    key_file: /home/ubuntu/.ssh/github
+    update: yes
+    dest: '{{ remote_working_directory }}'
+    force: yes
+
+- name: invoke docker compose to create container
   become: yes
-  command: echo "success"
+  command: 
+    cmd: docker-compose up --build -d --force-recreate
+    chdir: '{{remote_working_directory}}/twitter_crawler'

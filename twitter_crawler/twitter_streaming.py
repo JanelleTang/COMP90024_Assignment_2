@@ -83,7 +83,7 @@ def sendTweets(tweets_for_submission):
                 "hashtags":tweet["hashtags"],
                 "date_created":tweet['created at']}
             print(str(tweet['tweet id']))
-            if tweet["geo"] == None:
+            if not tweet["geo"] or len(tweet["geo"]) == 0:
                 t["geo"] = ""
             tweet_lst.append(t)
 

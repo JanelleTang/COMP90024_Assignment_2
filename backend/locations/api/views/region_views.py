@@ -16,31 +16,35 @@ def create_region(request):
     regions = ujson.loads(request.body)['data']
     if len(regions) == 0:
         resp = ResponseMessage(404, "empty regions", None)
+        print('No new tweets')
         return resp.response()
     try:
         regions_db = couch_db.getDatabase("regions")
         for row in regions:
             try:
                 city_id = row['city'].replace(" ","-")
+                
                 regions_db[city_id] = {'LGA':{row['lga']:row['aggregate_data']},
                                         'name':row['city'],
                                         'state':row['state'],
                                         'dates':{row['date']:row['aggregate_data']},
                                         'times':{row['time']:row['aggregate_data']},
+                                        'hashtags':row['hashtags'],
                                         'total_sentiment':row['aggregate_data']['total_sentiment'],
                                         'total_tweets':1}
             except ResourceConflict:
                 doc = regions_db[city_id]
                 lga_id = row['lga']
-
+                
                 #update existing LGA
                 if lga_id in doc['LGA']:
                     update_aggregate_data(doc['LGA'][lga_id],row['aggregate_data'])
                 else:
                     doc['LGA'][lga_id]=row['aggregate_data']
 
-
-                #update existing date
+                # update hashtags
+                doc['hashtags'] = {tag: doc['hashtags'].get(tag, 0) + row['hashtags'].get(tag, 0) for tag in set(doc['hashtags']) | set(row['hashtags'])}
+                # update existing date
                 current_date = row['date']
                 if current_date in doc['dates']:
                     update_aggregate_data(doc['dates'][current_date],row['aggregate_data'])
@@ -58,7 +62,7 @@ def create_region(request):
         resp = ResponseMessage(200, "success", None)
     except Exception as e:
         logger.info(e)
-        resp = ResponseMessage(500, "saving regions2 failed:\n"+str(e), None)
+        resp = ResponseMessage(500, "saving regions2 failed", None)
     return resp.response()
 
 
@@ -75,7 +79,7 @@ def get_cities(request):
     except Exception as e:
         logger.error("Unable to get location data 1")
         logger.error(e)
-        resp = ResponseMessage(500, "fail:\n"+str(e), None)
+        resp = ResponseMessage(500, "fail", None)
     return resp.response()
 
 @require_http_methods(['GET'])
@@ -97,7 +101,7 @@ def get_lgas(request):
     except Exception as e:
         logger.error("Unable to get location data 1")
         logger.error(e)
-        resp = ResponseMessage(500, "fail:\n"+str(e), None)
+        resp = ResponseMessage(500, "fail", None)
     return resp.response()
 
 @require_http_methods(['GET'])
@@ -111,7 +115,7 @@ def get_city_detail(request,pk):
     except Exception as e:
         logger.error("Unable to get {} data".format(pk))
         logger.error(e)
-        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
+        resp = ResponseMessage(500, "Fail", None)
     return resp.response()
 
 @require_http_methods(['DELETE'])    
@@ -125,9 +129,8 @@ def delete_city_detail(request,pk):
     except Exception as e:
         logger.error("Unable to delete {} data".format(pk))
         logger.error(e)
-        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
+        resp = ResponseMessage(500, "Fail", None)
     return resp.response()
-
 
 @require_http_methods(['GET'])
 def get_all_dates(request):
@@ -142,7 +145,7 @@ def get_all_dates(request):
         resp = ResponseMessage(200, "Success", dates_data)
     except Exception as e:
         logger.error(e)
-        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
+        resp = ResponseMessage(500, "Fail", None)
     return resp.response()
 
 @require_http_methods(['GET'])
@@ -158,23 +161,21 @@ def get_all_times(request):
         resp = ResponseMessage(200, "Success", times_data)
     except Exception as e:
         logger.error(e)
-        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
+        resp = ResponseMessage(500, "Fail", None)
     return resp.response()
 
 @require_http_methods(['GET'])
 def get_city_dates(request,pk):
     resp = None
     pk = 'none_'+pk
-
     try:
         regions_db = couch_db.getDatabase("regions")
         data = couch_to_dict(None,['dates'],regions_db[pk])
-        print(data)
         resp = ResponseMessage(200, "Success", data['dates'])
     except Exception as e:
         logger.error("Unable to get {} data".format(pk))
         logger.error(e)
-        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
+        resp = ResponseMessage(500, "Fail", None)
     return resp.response()
 
 @require_http_methods(['GET'])
@@ -188,5 +189,5 @@ def get_city_times(request,pk):
     except Exception as e:
         logger.error("Unable to get {} data".format(pk))
         logger.error(e)
-        resp = ResponseMessage(500, "Fail:\n"+str(e), None)
+        resp = ResponseMessage(500, "Fail", None)
     return resp.response()

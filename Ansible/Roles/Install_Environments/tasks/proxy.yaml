@@ -30,11 +30,13 @@
 - name: create docker config
   become: yes
   file:
-    path: ~/.docker
+    path: /home/ubuntu/.docker
     state: directory
+    owner: ubuntu
+    group: ubuntu
 
 - name: add container config
   become: yes
   template:
     src: config.json.j2
-    dest: "~/.docker/config.json"
+    dest: "/home/ubuntu/.docker/config.json"

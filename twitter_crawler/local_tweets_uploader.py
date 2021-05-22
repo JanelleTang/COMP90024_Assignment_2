@@ -16,7 +16,7 @@ for tweet in data:
         "location":tweet["user location"], 
         "hashtags":tweet["hashtags"],
         "date_created":tweet['created at']}
-    if tweet["geo"] == None:
+    if not tweet["geo"] or len(tweet["geo"]) == 0:
         t["geo"] = ""
     tweets.append(t)
 

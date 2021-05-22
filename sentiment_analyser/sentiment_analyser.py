@@ -17,8 +17,9 @@ stemmer = PorterStemmer()
 ## Check geo tag ##
 
 class CleanTweet:
-    def __init__(self, text,location,coordinates=False):
+    def __init__(self, text,location,hashtags,coordinates=False):
         self.cleaned_text = self.process_text(text)
+        self.hashtags = [x.lower() for x in hashtags]
         self.sentiment_dict = sia.polarity_scores(self.cleaned_text)
         self.sentiment_value =  self.sentiment_dict['compound']
         location = self.get_lga(location,coordinates)
@@ -61,7 +62,7 @@ class CleanTweet:
         """
         try:
             if coordinates:
-                location = geolocator.reverse(""+str(input[0])+str(input[1]),addressdetails=True,timeout=1000)
+                location = geolocator.reverse(""+str(input[1])+", "+str(input[0]),addressdetails=True,timeout=1000)
                 print('coordinates location {}'.location)
             else:    
                 location = geolocator.geocode(input,addressdetails=True,timeout=1000)
@@ -104,6 +105,15 @@ class CleanTweet:
         result = {"lga": self.lga,
                 "city": self.city,
                 "state":self.state,
+                "hashtags":self.hashtags_to_dict(),
                 'aggregate_data':{"total_sentiment":self.sentiment_value,
                                     "total_tweets":1}}
         return result
+
+    def hashtags_to_dict(self):
+        results ={}
+        for tag in self.hashtags:
+            results[tag] = self.hashtags.count(tag)
+        return results
+            
+

@@ -6,3 +6,4 @@ twitter_streaming4.py
 .vscode/
 node_modules/
 __pycache__/
+.DS_Store
