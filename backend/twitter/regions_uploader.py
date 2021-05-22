@@ -3,7 +3,7 @@ from sentiment_analyser import *
 from datetime import datetime
 import requests
 import sys
-import argparse
+from time import sleep
 
 ## Processing and aggregating tweets ##
 def tweet_processor(tweets):
@@ -41,15 +41,15 @@ def convert_date_format(date_string):
     return formatted_date,formatted_time
 
 if __name__ == '__main__':
-    path = 'http://127.0.0.1:8000/api/tweet/raw/'
+    path = 'http://127.0.0.1:8000/api/tweet/raw/100'
     try:
-        parser = argparse.ArgumentParser()
-        parser.add_argument("size", help="process tweets by size",type=int)
-        args = parser.parse_args()
-        size = args.size
-        tweets = requests.get(path+str(size)).json()['obj']
-        regions_data = tweet_processor(tweets)
-        dict_uploader(regions_data,"/api/location/create")
+        while True:
+            print("Restarting regions uploader...")
+            tweets = requests.get(path).json()['obj']
+            regions_data = tweet_processor(tweets)
+            dict_uploader(regions_data,"/api/location/create")
+            sleep(10)
+            
     except:
         e = sys.exc_info()[0]
         print(e)
