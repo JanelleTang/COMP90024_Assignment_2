@@ -49,7 +49,7 @@ if __name__ == '__main__':
                 tweets = requests.get(path).json()['obj']
                 regions_data = tweet_processor(tweets)
                 dict_uploader(regions_data,"/api/location/create")
-                sleep(10)
+                sleep(1800)
             except requests.exceptions.ConnectionError:
                 print("Connection Error. Please Wait...")
                 sleep(100)
