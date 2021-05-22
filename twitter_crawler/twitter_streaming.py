@@ -75,27 +75,21 @@ def processTweets(listTweets):
 
 def sendTweets(tweets_for_submission):
     if tweets_for_submission:
+        tweet_lst = []
+        for tweet in tweets_for_submission:
+            t = {"id": str(tweet['tweet id']), 
+                "text":tweet["text"], 
+                "location":tweet["user location"], 
+                "hashtags":tweet["hashtags"],
+                "date_created":tweet['created at']}
+            print(str(tweet['tweet id']))
+            if tweet["geo"] == None:
+                t["geo"] = ""
+            tweet_lst.append(t)
 
-        response = upload(tweets_for_submission,'/api/tweet/raw/create') 
-        print(response.code)
-
-        '''
-        if os.path.isfile('StreamtweetDump.json') and os.path.getsize('StreamtweetDump.json') > 0:
-            with open('StreamtweetDump.json') as file:
-                data = json.load(file)
-                data.extend(tweets_for_submission)
-                file.close()
-
-                with open('StreamtweetDump.json', 'w') as outfile:
-                    tweet_df = pd.DataFrame(data)
-                    json.dump(data, outfile, default=str, indent=4)
-                    outfile.close()
-                    tweet_df.to_excel('streamingDumpWithCrawler.xlsx', index = False)
-        else:
-            with open('StreamtweetDump.json', 'w') as outfile:
-                json.dump(tweets_for_submission, outfile, default=str, indent=4)
-                outfile.close()
-        '''
+        print("number of tweets: " + str(len(tweet_lst)))
+        response = upload({"data": tweet_lst},'/api/tweet/raw/create') 
+        print(response.text)
 
         now = datetime.now()
 
@@ -118,11 +112,10 @@ class StdOutListener(tweepy.StreamListener):
     def on_data(self,data):
         try:
             res = json.loads(data)
-            temp_dict = {'id': str(res['id']), 'user id': str(res['user']['id']), 'text': res['text'], 
-            'user name': res['user']['name'], 'location': res['user']['location'],
-            'geo': res['geo'],'hashtags': [],'date_created': str(res['created_at']), 
-            'followers count': res['user']['followers_count'], 
-             }
+            temp_dict = {'tweet id': res['id'], 'user id': res['user']['id'], 'user name': res['user']['name'], 
+            'screen name': res['user']['screen_name'], 'followers count': res['user']['followers_count'], 
+            'user location': res['user']['location'], 'geo': res['geo'], 'created at': str(res['created_at']), 
+            'text': res['text'], 'truncated': res['truncated'], 'hashtags': []}
 
             if res['truncated']:
                 temp_dict['text']= res['extended_tweet']['full_text']
