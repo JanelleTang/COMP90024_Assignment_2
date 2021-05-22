@@ -16,7 +16,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+DATA_UPLOAD_MAX_MEMORY_SIZE=10*1024*1024
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -27,7 +27,7 @@ SECRET_KEY = '5fk-md)6nn_m#h!+xomr92ep7$8vt&o%#=-%^4uo!^(58(0u&2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['myproject']
+ALLOWED_HOSTS = []
 
 
 # Application definition
