@@ -121,17 +121,17 @@ def convert_to_geom(obj):
 
 def get_sentiment_rank(sentiment,count):
     average_sent = sentiment/count
-    if average_sent <-0.66:
+    if average_sent <-0.5:
         return -3
-    elif average_sent <-0.33:
+    elif average_sent <-0.2:
         return -2
     elif average_sent <0:
         return -1
     elif average_sent == 0:
         return 0
-    elif average_sent <=0.33:
+    elif average_sent <=0.2:
         return 1
-    elif average_sent <=0.66:
+    elif average_sent <=0.5:
         return 2
     elif average_sent <=1:
         return 3
