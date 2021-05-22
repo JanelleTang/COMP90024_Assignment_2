@@ -57,7 +57,7 @@ import BubbleChart from "@/components/scatter.js"
 
 
 function tooltipText(d,xVar,yVar) {
-		var returnArray = [d['label']]
+		var returnArray = []
 		var varArray = [xVar,yVar]
 		var varsUsed = [xVar,yVar]
 		varArray.forEach((e) => {
@@ -140,7 +140,7 @@ export default {
 			return {
 				datasets: [{
 					//label for entire dataset
-					label: "Melbourne",
+					label: "Cities",
 					borderColor: "black",
 					backgroundColor: data.map((d) => {
 					// highlight supplied dot label as red
@@ -176,9 +176,13 @@ export default {
 			tooltips : {
 				callbacks: {
 					// specify label on mouseover tooltip
+					// convert label to proper case and replace - with space
 					label : ((item,data) => {
-					console.log(data);
-					return tooltipText(data['datasets'][0]['data'][item['index']],this.xSelect,this.ySelect)})
+					return (data['datasets'][0]['data'][item['index']]['label']).split("-").map(d => d[0].toUpperCase() + d.substr(1)).join(" ")}),
+					afterLabel: ((item,data) => {
+					return tooltipText(data['datasets'][0]['data'][item['index']],this.xSelect,this.ySelect)
+					
+					})
 				}
 			},
 			onClick : (mouse,item) => {

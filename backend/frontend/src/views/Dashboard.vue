@@ -108,7 +108,7 @@ export default {
 	},
 	// when a dot is selected in graph, change header, highlight in graph, and limit data in other graphs to only that subdivision
 	clickedbubble : function(value) {
-		this.titleHeader = value;
+		this.titleHeader = value=='all'?'All Cities':(value.split("-").map(d => d[0].toUpperCase() + d.substr(1))).join(" ");
 		this.loadGraphs(value)
 	},
 	// used to check if demoninators are valid numbers
@@ -212,45 +212,48 @@ export default {
 		var barLabels = ['Renters','Owners','Being Purchased','Coal Miners','Gas Supply','Mining','Solar Panels','Solar Water Heaters',
 									'Income Over 3000','Income Under 1250','Age under 35','Multiculturalism Opinion','Homeless Rate','Aboriginal Origin',
 									'Pleasant COmmunity','Gaming Losses','Students']
+		function barDataFunc(data,num,denom){
+			return {'y':((sum(data.map((d) => {return d[1][num]}))/sum(data.map((d) => {return (d[1][denom])})))-
+				minMax[num][0])/(minMax[num][1]-minMax[num][0]),'data':data, 'num' : num, 'denom' : denom}
+		}
 		var barFactorData = [
-					((sum(barData.map((d) => {return d[1].renters}))/sum(barData.map((d) => {return (d[1].total_homes)})))-minMax['renters'][0])/(minMax['renters'][1]-minMax['renters'][0]),
-					((sum(barData.map((d) => {return d[1].owned}))/
-					sum(barData.map((d) => {return (d[1].total_homes)})))-minMax['owned'][0])/(minMax['owned'][1]-minMax['owned'][0]),
-					((sum(barData.map((d) => {return d[1].being_purchased}))/
-					sum(barData.map((d) => {return (d[1].total_homes)})))-minMax['being_purchased'][0])/(minMax['being_purchased'][1]-minMax['being_purchased'][0]),
-					((sum(barData.map((d) => {return d[1].coal_miners}))/
-					sum(barData.map((d) => {return (d[1].industry)})))-minMax['coal_miners'][0])/(minMax['coal_miners'][1]-minMax['coal_miners'][0]),
-					((sum(barData.map((d) => {return d[1].gas_supply}))/
-					sum(barData.map((d) => {return (d[1].industry)})))-minMax['gas_supply'][0])/(minMax['gas_supply'][1]-minMax['gas_supply'][0]),
-					((sum(barData.map((d) => {return d[1].miners}))/
-					sum(barData.map((d) => {return (d[1].industry)})))-minMax['miners'][0])/(minMax['miners'][1]-minMax['miners'][0]),
-					((sum(barData.map((d) => {return d[1].solar_panels}))/
-					sum(barData.map((d) => {return (d[1].total_homes)})))-minMax['solar_panels'][0])/(minMax['solar_panels'][1]-minMax['solar_panels'][0]),
-					((sum(barData.map((d) => {return d[1].solar_water_heaters}))/
-					sum(barData.map((d) => {return (d[1].total_homes)})))-minMax['solar_water_heaters'][0])/(minMax['solar_water_heaters'][1]-minMax['solar_water_heaters'][0]),
-					((sum(barData.map((d) => {return d[1].income_3000}))/
-					sum(barData.map((d) => {return (d[1].age_income_total)})))-minMax['income_3000'][0])/(minMax['income_3000'][1]-minMax['income_3000'][0]),
-					((sum(barData.map((d) => {return d[1].income_1250}))/
-					sum(barData.map((d) => {return (d[1].age_income_total)})))-minMax['income_1250'][0])/(minMax['income_1250'][1]-minMax['income_1250'][0]),
-					((sum(barData.map((d) => {return d[1].age_35}))/
-					sum(barData.map((d) => {return (d[1].age_income_total)})))-minMax['age_35'][0])/(minMax['age_35'][1]-minMax['age_35'][0]),
-					((sum(barData.map((d) => {return d[1].multi_opinion}))/
-					sum(barData.map((d) => {return (d[1].survey_pop)})))-minMax['multi_opinion'][0])/(minMax['multi_opinion'][1]-minMax['multi_opinion'][0]),
-					((sum(barData.map((d) => {return d[1].homeless}))/
-					sum(barData.map((d) => {return (d[1].survey_pop)})))-minMax['homeless'][0])/(minMax['homeless'][1]-minMax['homeless'][0]),
-					((sum(barData.map((d) => {return d[1].aboriginal}))/
-					sum(barData.map((d) => {return (d[1].survey_pop)})))-minMax['aboriginal'][0])/(minMax['aboriginal'][1]-minMax['aboriginal'][0]),
-					((sum(barData.map((d) => {return d[1].pleasant}))/
-					sum(barData.map((d) => {return (d[1].survey_pop)})))-minMax['pleasant'][0])/(minMax['pleasant'][1]-minMax['pleasant'][0]),
-					((sum(barData.map((d) => {return d[1].gaming}))/
-					sum(barData.map((d) => {return (d[1].survey_pop)})))-minMax['gaming'][0])/(minMax['gaming'][1]-minMax['gaming'][0]),
-					((sum(barData.map((d) => {return d[1].students}))/
-					sum(barData.map((d) => {return (d[1].survey_pop)})))-minMax['students'][0])/(minMax['students'][1]-minMax['students'][0])
+					barDataFunc(barData,'renters','total_homes'),
+					barDataFunc(barData,'owned','total_homes'),
+					barDataFunc(barData,'being_purchased','total_homes'),
+					barDataFunc(barData,'coal_miners','industry'),
+					barDataFunc(barData,'gas_supply','industry'),
+					barDataFunc(barData,'miners','industry'),
+					barDataFunc(barData,'solar_panels','total_homes'),
+					barDataFunc(barData,'solar_water_heaters','total_homes'),
+					barDataFunc(barData,'income_3000','age_income_total'),
+					barDataFunc(barData,'income_1250','age_income_total'),
+					barDataFunc(barData,'age_35','age_income_total'),
+					barDataFunc(barData,'multi_opinion','survey_pop'),
+					barDataFunc(barData,'homeless','survey_pop'),
+					barDataFunc(barData,'aboriginal','survey_pop'),
+					barDataFunc(barData,'pleasant','survey_pop'),
+					barDataFunc(barData,'gaming','survey_pop'),
+					barDataFunc(barData,'students','survey_pop'),
 						]
-		console.log(barFactorData);
+		this.barOptions['tooltips'] = {
+									'callbacks' : {
+										'label' : (() => { return ''}),
+										'afterLabel' : ((item,data) => {
+											var labelData = data['datasets'][0]['data'][item['index']]
+											console.log(labelData);
+											var num = sum(labelData['data'].map((d) => {return d[1][labelData['num']]}))
+											var denom = sum(labelData['data'].map((d) => {return d[1][labelData['denom']]}))
+											return ['Avg: ' + Math.round(num/denom*100)/100,
+													labelData['num']+": " + num,
+													labelData['denom']+": " + denom
+													];
+										})
+								
+							}
+						}
 		// only plot properties that have information to display
-		barLabels = barLabels.filter(function(d,i) { return !Number.isNaN(barFactorData[i]);})
-		barFactorData = barFactorData.filter(function(d) {return !Number.isNaN(d);})
+		barLabels = barLabels.filter(function(d,i) { return !Number.isNaN(barFactorData[i]['y']);})
+		barFactorData = barFactorData.filter(function(d) {return !Number.isNaN(d['y']);})
 		this.barProp = {labels : barLabels,
 			datasets: [{
 				label: 'Features',
