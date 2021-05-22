@@ -18,12 +18,24 @@
             md="4"
             lg="2"
             >
-                    <v-card class="">
+            <v-card class="">
             <v-card-title class="text-center">
-                Climate Change Sentiment in Australian Cities
+                Climate Change Sentiment
             </v-card-title>
             <v-card-text>
-                Add some graphs here (change on click)
+              <v-list nav dense>
+                <v-list-item
+                link
+                v-for="item in legend_items"
+                :key="item.text"
+                >
+                <v-icon :color="item.color">mdi-square-rounded</v-icon>
+                <v-list-item-content>
+                    {{ item.text }}
+                </v-list-item-content>
+                </v-list-item>
+              </v-list>
+
             </v-card-text>
 
       </v-card>
@@ -51,17 +63,25 @@ import Sidebar from "@/components/Sidebar"
       name:'Map',
       data () {
           return {
-              center: [144.9631, -37.8136],
-              zoom: 9,
+              center: [133.7751, -25.2744],
+              zoom: 3,
               lga_geodata: "api/lga_data.geojson",
               city_geodata: "api/city_data.geojson",
-              locations: [["Melbourne", 144.9631,-37.8136],
-              ["Sydney",151.2093,-33.8688],
-              ["Adelaide",138.6007,-34.9285],
-              ["Brisbane",153.0260,-27.4705]],
+              // locations: [["Melbourne", 144.9631,-37.8136],
+              // ["Sydney",151.2093,-33.8688],
+              // ["Adelaide",138.6007,-34.9285],
+              // ["Brisbane",153.0260,-27.4705]],
               url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
               bounds: null,
-
+              legend_items:[
+                {text: 'High Negative', color:'#DC143C'},
+                {text: 'Negative', color:'#FF7F50'},
+                {text: 'Low Negative', color:'#ffa53d'},
+                {text: 'Neutral', color:'#FFD700'},
+                {text: 'Low Positive', color:'#98FB98'},
+                {text: 'Positive', color:'#32CD32'},
+                {text: 'High Positive', color:'#006400'},
+              ]
               }
       },
       components:{
@@ -75,7 +95,9 @@ import Sidebar from "@/components/Sidebar"
           this.boundingBoxAU();
           this.boundingBoxVIC();
           this.boundingBoxNSW();
-
+          this.boundingBoxSA();
+          this.boundingBoxQLD();
+          this.boundingBoxTAS();
       },
 
       methods: {
@@ -111,20 +133,24 @@ import Sidebar from "@/components/Sidebar"
                   'minzoom':5,
                   'paint': {
                     'fill-color': [
-                        'match',
-                        ['get','sentiment_rank'],
-                        1,
-                        '#d73027',
-                        2,
-                        '#f46d43',
-                        3,
-                        '#fee08b',
-                        4,
-                        '#a6d96a',
-                        5,
-                        '#1a9850',
-                        /* other */ '#ccc'
-                    ],
+                          'match',
+                          ['get','sentiment_rank'],
+                          -3,
+                          '#DC143C',
+                          -2,
+                          '#FF7F50',
+                          -1,
+                          '#ffa53d',
+                          0,
+                          '#FFD700',
+                          1,
+                          '#98FB98',
+                          2,
+                          '#32CD32',
+                          3,
+                          '#006400',
+                          /* other */ '#ccc'
+                        ],
                     'fill-opacity': 0.7//parseFloat(['get', "sentiment_value"])
                   }
                   });
@@ -141,9 +167,12 @@ import Sidebar from "@/components/Sidebar"
                   });
                   /* ------- Add a popup tooltip on Click ------- */
                   this.map.on('click', 'lga_fill', (e) => {
+                    var total_sent = parseFloat(e.features[0].properties.sentiment_value)
+                    var total_tweets = e.features[0].properties.n_tweets
+                    var av_sent = Math.round(total_sent/total_tweets*100)/100
                     new Mapbox.Popup({closeOnClick: true,offset: 5})
                     .setLngLat(e.lngLat)
-                    .setHTML(e.features[0].properties.name)
+                    .setHTML(`<b>${e.features[0].properties.display_name}</b> <br/> Average Sentiment: ${av_sent}<br/> Total Tweets: ${total_tweets}`)
 
                     .addTo(this.map);
                     });
@@ -171,20 +200,34 @@ import Sidebar from "@/components/Sidebar"
                     'source': 'city_layer',
                     'maxzoom':5,
                     'paint': {
+                        // 'circle-radius': {
+                        //   property: 'n_tweets',
+                        //   stops:[
+                        //     [0,5],
+                        //     [100,15],
+                        //     [300,25]
+                        //     [500,35],
+                        //   ]
+
+                        // },
                         'circle-radius': 30,
                         'circle-color': [
                           'match',
                           ['get','sentiment_rank'],
+                          -3,
+                          '#DC143C',
+                          -2,
+                          '#FF7F50',
+                          -1,
+                          '#ffa53d',
+                          0,
+                          '#FFD700',
                           1,
-                          '#d73027',
+                          '#98FB98',
                           2,
-                          '#f46d43',
+                          '#32CD32',
                           3,
-                          '#fee08b',
-                          4,
-                          '#a6d96a',
-                          5,
-                          '#1a9850',
+                          '#006400',
                           /* other */ '#ccc'
                         ],
                         'circle-stroke-color': 'white',
@@ -194,9 +237,12 @@ import Sidebar from "@/components/Sidebar"
                   });
 				  
 				  this.map.on('click', 'city-circle', (e) => {
+                    var total_sent = parseFloat(e.features[0].properties.sentiment_value)
+                    var total_tweets = e.features[0].properties.n_tweets
+                    var av_sent = Math.round(total_sent/total_tweets*100)/100
                     new Mapbox.Popup({closeOnClick: true,offset: 5})
                     .setLngLat(e.lngLat)
-                    .setHTML(e.features[0].properties.name)
+                    .setHTML(`<b>${e.features[0].properties.display_name}</b> <br/> Average Sentiment: ${av_sent}<br/> Total Tweets: ${total_tweets}`)
 
                     .addTo(this.map);
                     });
@@ -236,8 +282,31 @@ import Sidebar from "@/components/Sidebar"
                 ]);
             });
           },
+          boundingBoxSA(){
+            document.getElementById('fit-sa').addEventListener('click', () => {
+              this.map.fitBounds([
+              [141.0027,-38.113],
+              [129.0013,-25.763]
+                ]);
+            });
+          },
+          boundingBoxTAS(){
+            document.getElementById('fit-tas').addEventListener('click', () => {
+              this.map.fitBounds([
+              [143.7488,-39.1984777],
+              [148.084,-45.17305]
+                ]);
+            });
+          },
+          boundingBoxQLD(){
+            document.getElementById('fit-qld').addEventListener('click', () => {
+              this.map.fitBounds([
+              [137.994,-29.17926],
+              [153.6116,-9.0880]
+                ]);
+            });
+          },
       },
-
   }
 </script>
 <style>
@@ -251,7 +320,9 @@ import Sidebar from "@/components/Sidebar"
     position:relative;
     border: 1px solid darkgrey;
 }
-
+/* .legend-item{
+  float:left;
+} */
 /* #fit-au {
 display: block;
 position: relative;
@@ -271,7 +342,6 @@ position: absolute;
    z-index: 1;
    pointer-events: all;
 } */
-
 
 
 .mapboxgl-ctrl-attrib-inner{
