@@ -11,13 +11,14 @@ import os
 import logging
 from django.views.decorators.http import require_http_methods
 from .models import LGA,City
+from time import sleep
 from backend.utils.common import *
 
 
 
 @require_http_methods(['GET'])
 def update_model_instances(requests):
-    path = 'http://172.26.134.122/api/location/'
+    path = 'http://127.0.0.1:8000/api/location/'
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
     django.setup()
 
@@ -34,6 +35,7 @@ def update_model_instances(requests):
     }
     try:
         CouchToInstances(path+"city",city_dict,True)
+        sleep(10)
         CouchToInstances(path+"lga",lga_dict,False)
         
     except Exception as e:
@@ -77,12 +79,14 @@ def update_instance(data,geom_dict,is_city):
         if is_city:
             obj = model(name = pk,
                     state = data['state'],
+                    display_name = pk.title(),
                     polygon = geom,
                     sentiment_value = round(data['total_sentiment'],4),
                     sentiment_rank = sent_rank,
                     n_tweets = data['total_tweets'])
         else:
             obj = model(name = pk,
+                display_name = pk.title(),
                 state = data['state'],
                 city = data['city'],
                 polygon = geom,
