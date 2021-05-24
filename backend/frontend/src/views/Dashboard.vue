@@ -81,13 +81,14 @@ export default {
 	loaded: false,
 	loaded2: false,
 	extraOptions: null,
-	titleHeader: "All LGAs",
+	titleHeader: "All Cities",
 	timeSeries: {
+		tension: 0,
         scales: {
             xAxes: [{
                 type:"time",
 				time:{
-					unit: 'day'
+					unit: 'week'
 				}
 			}]
         }
@@ -128,7 +129,7 @@ export default {
 			return {'lga' : prop.name,
 					'city' : prop.city,
 					'n_tweets' : prop.total_tweets,
-					'sentiment_value' : prop.total_sentiment*prop.total_tweets,
+					'sentiment_value' : prop.total_sentiment,
 					'state' : prop.state,
 					'owned' : aurinLGA?this.checkNum(aurinLGA['owned']):0,
 					'renters' : aurinLGA?this.checkNum(aurinLGA['renters']):0,
@@ -182,9 +183,11 @@ export default {
 			datasets: [{
 				label: 'Daily Tweets',
 				data :  Object.values(this.tweetData).map((d) => {return d[1]['total_tweets']}),
-				borderColor: 'red',
+				backgroundColor: 'blue',
+				borderColor: 'blue',
 			}]
 		}
+		console.log(Object.values(this.tweetData).map((d) => {return d[1]['total_tweets']}))
 		// get the min and max values by geographic subdivision for each factor
 		var minMax = {
 			'renters' : this.extent(this.chartdata.map((d) => {return d[1].total_homes>0?d[1].renters/d[1].total_homes:null})),
@@ -258,7 +261,7 @@ export default {
 			datasets: [{
 				label: 'Features',
 				data : barFactorData,
-				fill: false,
+				backgroundColor: 'red',
 				borderColor: 'red',
 			}]
 		}
