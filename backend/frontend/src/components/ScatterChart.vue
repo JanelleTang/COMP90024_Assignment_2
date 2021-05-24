@@ -32,8 +32,8 @@
 		<option value="coal_miner">Coal Miner</option>
 		<option value="miner">Miner</option>
 		<option value="gas_supply">Gas Supply</option>
-		<option value="solar_panel">Solar Panels</option>
-		<option value="solar_water_heater">Solar Water Heaters</option>
+		<option value="solar_panels">Solar Panels</option>
+		<option value="solar_water_heaters">Solar Water Heaters</option>
 		<option value="income_3000">Income Over 3000</option>
 		<option value="income_1250">Income Under 1250</option>
 		<option value="age_35">Age Under 35</option>
