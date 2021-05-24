@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
+SPATIALITE_LIBRARY_PATH = 'mod_spatialite.so'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
