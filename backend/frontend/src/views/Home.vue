@@ -2,11 +2,18 @@
   <div class="home" id = "background-wrapper">
     <!-- <Navbar></Navbar> -->
     <v-app>
+        <v-parallax id="parallax-home"
+          light
+          height="780"
+          src="https://images.unsplash.com/photo-1569060368645-4ab30c8d8b0e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1350&q=80"
+        >
       <v-content>
-        <v-container>
-          Click the button below to get started!        
+        <v-container id = "home-container">
+          <h1>Understanding Attitudes to Climate Change Through Demographic Data</h1>
+          <br/>
+          <div class="box">Click the button below to get started!</div>  
         </v-container>
-
+        
       </v-content>
       <v-fab-transition>
         <v-btn id="start-btn"
@@ -19,33 +26,49 @@
           <v-icon color="white">mdi-navigation</v-icon>
         </v-btn>
       </v-fab-transition>
+      </v-parallax>
     </v-app>
   </div>
 </template>
 
 <script>
 // import Navbar from "@/components/Navbar.vue";
-
 export default {
   name: "Home",
   components: {
-    // Navbar
   },
+  // data: () => ({
+  //   bg: require("@/assets/bg.png"),
+  // }),
 };
 </script>
 
 <style>
 .home{
-  height:100vh
+  height:90vh;
 }
-/* #background-wrapper {
-        background:linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.7)), url(../assets/abstract_low_poly_elegant_banner_design_0111.jpg);
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        background-size: cover;
-        -o-background-size: cover;
-        z-index:1
-    } */
+#parallax-home{
+  padding-top: 10px;
+  bottom:0;
+}
+
+#home-container {
+  color: #fff;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+}
+
+#background-wrapper {
+  background-size: cover;
+  background:linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.7)), url('~@/assets/bg.png');
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+  z-index:1 
+}
+
 #start-btn {
   animation: MoveUpDown 1.1s linear infinite;
   position: fixed;

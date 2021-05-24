@@ -40,7 +40,6 @@
     </div>
 </template>
 
-
 <script>
   export default {
     data () {
@@ -50,6 +49,9 @@
           { text: 'Australia', icon: 'mdi-card-search', id: 'fit-au' },
           { text: 'Victoria', icon: '', id: 'fit-vic'},
           { text: 'NSW', icon: '', id: 'fit-nsw'},
+          { text: 'SA', icon: '', id: 'fit-sa'},
+          { text: 'Tasmania', icon: '', id: 'fit-tas'},
+          { text: 'QLD', icon: '', id: 'fit-qld'},
         ],
         mini: true,
       }

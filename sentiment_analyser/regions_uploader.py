@@ -41,14 +41,22 @@ def convert_date_format(date_string):
     formatted_date = datetime.strftime(time_obj.date(), '%Y-%m-%d')
     return formatted_date,formatted_time
 if __name__ == '__main__':
-    path = 'http://172.26.134.122/api/tweet/raw/100'
+    path = 'http://172.26.134.122'
     try:
         while True:
             try:
                 print("Restarting regions uploader...")
-                tweets = requests.get(path).json()['obj']
+                tweets = requests.get(URL +'/api/tweet/raw/100').json()['obj']
                 regions_data = tweet_processor(tweets)
                 dict_uploader(regions_data,"/api/location/create")
+                print("Creating Model Instances...")
+                requests.get("http://172.26.134.122:8000/location/update/city")
+                requests.get("http://172.26.133.17:8000/location/update/city")
+                requests.get("http://172.26.133.243:8000/location/update/city")
+                sleep(10)
+                requests.get("http://172.26.134.122:8000/location/update/lga")
+                requests.get("http://172.26.133.17:8000/location/update/lga")
+                requests.get("http://172.26.133.243:8000/location/update/lga")
                 sleep(1800)
             except requests.exceptions.ConnectionError:
                 print("Connection Error. Please Wait...")
