@@ -37,9 +37,6 @@ export default {
   name: "Home",
   components: {
   },
-  // data: () => ({
-  //   bg: require("@/assets/bg.png"),
-  // }),
 };
 </script>
 
@@ -61,7 +58,6 @@ export default {
 
 #background-wrapper {
   background-size: cover;
-  background:linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.7)), url('~@/assets/bg.png');
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
