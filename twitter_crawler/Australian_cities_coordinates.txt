@@ -1,1 +1,17 @@
+# ============= COMP90024 - Assignment 2 ============= #
+#                               
+# The University of Melbourne           
+# Team 37
+#
+# ** Authors: **
+# 
+# JJ Burke              1048105
+# Janelle Tang          694209
+# Shuang Qiu            980433
+# Declan Baird-Watson   640975
+# Avinash Rao           1024577 
+# 
+# Location: Melbourne
+# ==================================================== 
+
 {'Melbourne': [-37.53901009288931, 144.73478737808276], 'Sydney': [-33.55923680734129, 150.7567011369496], 'Brisbane': [-27.27406802071406,152.73138791670308]}
