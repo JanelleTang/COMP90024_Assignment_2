@@ -4,6 +4,7 @@
 		<option disabled>X Axis</option>
 		<option value="n_tweets" selected>Tweet Count</option>
 		<option value="sentiment_value">Tweet Sentiment</option>
+		<option value="tweets_per_pop">Tweets per Population</option>
 		<option value="renters">Renter</option>
 		<option value="owned">Owner</option>
 		<option value="being_purchased">Being Purchased</option>
@@ -26,7 +27,8 @@
 		<option disabled>Y Axis</option>
 		<option value="n_tweets">Tweet Count</option>
 		<option value="sentiment_value" selected>Tweet Sentiment</option>
-		<option value="renter">Renter</option>
+		<option value="tweets_per_pop">Tweets per Population</option>
+		<option value="renters">Renter</option>
 		<option value="owned">Owner</option>
 		<option value="being_purchased">Being Purchased</option>
 		<option value="coal_miner">Coal Miner</option>
@@ -96,6 +98,16 @@ function tooltipText(d,xVar,yVar) {
 					varsUsed.push('n_tweets')
 				}
 				break;
+			case 'tweets_per_pop':
+				if(!varsUsed.includes('n_tweets')){
+					returnArray.push("Tweet Count: "+Math.round(+d['data']['n_tweets']))
+					varsUsed.push('n_tweets')
+				}
+				if(!varsUsed.includes('age_income_total')){
+					returnArray.push("Total Population: "+Math.round(+d['data']['age_income_total']))
+					varsUsed.push('age_income_total')
+				}
+				break;
 		}
 		})
 		return returnArray;
@@ -129,12 +141,17 @@ export default {
 				return +d[v]/+d['survey_pop']
 			case 'sentiment_value':
 				return +d[v]/+d['n_tweets']
+			case 'tweets_per_pop':
+				console.log("tweets")
+				return +d['n_tweets']/+d['age_income_total']
 			default:
+				console.log("missed")
 				return +d[v]
 		}
 	},
 	chartDataFormat: function(data, xVar, yVar) {
-			data = data.filter((d) => { return xVar in d[1] && yVar in d[1];})
+			data = data.filter((d) => { return (xVar in d[1] | (xVar == 'tweets_per_pop' & 'age_income_total' in d[1])) && 
+					(yVar in d[1] | (yVar == 'tweets_per_pop' & 'age_income_total' in d[1]));})
 			var pointData =  data.map((d) => {return {'x' : this.normalize(d[1],xVar), 'y' : this.normalize(d[1],yVar), 'r' : 10,
 				'label' : d[0], 'data' : d[1]} })
 			return {

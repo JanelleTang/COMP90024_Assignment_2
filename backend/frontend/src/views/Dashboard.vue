@@ -169,6 +169,7 @@ export default {
 			return a
 		},{}))
 		// sort tweet data by date so renders properly on graphs
+		this.tweetData = this.tweetData.filter(function(d) {return new Date(d[0]) >= new Date(2021,3,1)});
 		this.tweetData = this.tweetData.sort(function(a,b) {if(a[0]<b[0]){return -1}else{return 1}})
 		this.scatterOptions = []
 		this.linedata = {labels : this.tweetData.map((d) => {return d[0]}),
