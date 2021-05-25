@@ -33,6 +33,7 @@ def update_city_instances(requests):
         'cairns':'POINT(145.7710 -16.9203)',
         'newcastle': 'POINT(151.7817 -32.9283)'
     }
+
     try:
         CouchToInstances(path,city_dict,True)
         print("Cities updated.")
@@ -52,11 +53,13 @@ def update_lga_instances(requests):
     try:
         CouchToInstances(path,lga_dict,False)
         print("LGAs updated.")
+        resp = ResponseMessage(200, "success", None)
     except Exception as e:
         logger.info(e)
         resp = ResponseMessage(500, "Updating model instances failed. Try Again.", None)
-    resp = ResponseMessage(200, "success", None)
+    
     return resp.response()
+
 ## ========================== Region Polygons ========================== #
 def CouchToInstances(path,geo_dict,isCity):
     region_data = requests.get(path).json()['obj']
@@ -110,6 +113,7 @@ def convert_to_geom(obj):
         return GEOSGeometry(obj)
     coordinates = obj['geometry']
     return GEOSGeometry(js.dumps(coordinates))
+
 def get_sentiment_rank(sentiment,count):
     average_sent = sentiment/count
     if average_sent <-0.5:
