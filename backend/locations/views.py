@@ -14,7 +14,7 @@ from .models import LGA,City
 from time import sleep
 from backend.utils.common import *
 
-
+logger = logging.getLogger('django.debug')
 
 @require_http_methods(['GET'])
 def update_city_instances(requests):
