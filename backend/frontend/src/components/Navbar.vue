@@ -19,7 +19,6 @@
             <v-app-bar-nav-icon></v-app-bar-nav-icon>
           </v-btn>
         </template>
-
         <v-list>
           <v-list-item
             v-for="item in nav_items"
@@ -31,14 +30,13 @@
           </v-list-item>
         </v-list>
       </v-menu>
-
       <v-toolbar-title class="pr-3">
         <v-btn to="/">
           <v-list-item-avatar>
             <v-img :src="logo"></v-img>
           </v-list-item-avatar>
           <v-list-title class="pt-2">
-            <h5>Project Title</h5>
+            <h5>Attitudes on #ClimateChange</h5>
           </v-list-title>
         </v-btn>
       </v-toolbar-title>
@@ -56,9 +54,10 @@
         </v-btn>
       </v-toolbar-item>
       <v-spacer></v-spacer>
-      <v-bottom-sheet>
+      <v-bottom-sheet
+      v-model="sheet">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn dark v-bind="attrs" v-on="on" icon>
+          <v-btn dark v-bind="attrs" v-on="on" icon @click="sheet = !sheet">
             <v-icon>mdi-account-multiple</v-icon>
           </v-btn>
         </template>
@@ -67,7 +66,12 @@
           id="name-sheet"
           :height="$vuetify.breakpoint.xs ? 450 : '230'"
         >
-          <v-btn icon class="mt-6" text color="error" @click="sheet = !sheet">
+          <v-btn
+          class="mt-6"
+          color="red"
+          @click="sheet = !sheet"
+          icon
+        >
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <div class="my-3 mx-5">
@@ -100,7 +104,6 @@
         </v-sheet>
       </v-bottom-sheet>
     </v-app-bar>
-
     <v-content> </v-content>
   </div>
 </template>
@@ -111,28 +114,25 @@ export default {
     nav_items: [
       { title: "Map Overview", icon: "mdi-map-legend", href: "/map" },
       { title: "Dashboard", icon: "mdi-view-dashboard", href: "/dashboard" },
-      { title: "Word Cloud", icon: "mdi-folder-information", href: "/wordcloud" },
+      { title: "Wordcloud", icon: "mdi-cloud" },
     ],
     names: [
       { name: "Janelle Tang", id: "694209" },
-      // INSERT YOUR NAMES WITH THE FOLLOWING TEMPLATE
-      { name: "NAME", id: "STUDENTID" },
-      { name: "NAME", id: "STUDENTID" },
-      { name: "NAME", id: "STUDENTID" },
-      { name: "NAME", id: "STUDENTID" },
+      { name: "Declan Baird-Watson", id: "640975" },
+      { name: "Avinash Rao", id: "1024577" },
+      { name: "JJ Burke", id: "1048105" },
+      { name: "Shuang Qiu", id: "980433" },
     ],
     logo: require("@/assets/global-warming.png"),
     offset: true,
   }),
 };
 </script>
-
 <style>
 /* Can't remove hover underline in navbar */
 .nav-btn a:hover {
   text-decoration: none !important;
 }
-
 .name-sheet {
   position: static;
 }
