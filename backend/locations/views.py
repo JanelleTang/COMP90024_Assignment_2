@@ -47,7 +47,7 @@ def update_lga_instances(requests):
     path = 'http://172.26.134.122/api/location/lga'
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
     django.setup()
-    with open('./data/shapefiles/combined_lga_data.json') as f:
+    with open('locations/data/shapefiles/combined_lga_data.json') as f:
         lga_dict = js.load(f)
     try:
         CouchToInstances(path,lga_dict,False)
