@@ -4,7 +4,7 @@ import requests
 import pandas as pd
 import django 
 from django.contrib.gis.geos import GEOSGeometry
-import json
+import json as js
 from django.core.exceptions import ObjectDoesNotExist
 import django
 import os
@@ -47,8 +47,8 @@ def update_lga_instances(requests):
     path = 'http://172.26.134.122/api/location/lga'
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
     django.setup()
-    with open('locations/data/shapefiles/combined_lga_data.json') as f:
-        lga_dict = json.load(f)
+    with open('./data/shapefiles/combined_lga_data.json') as f:
+        lga_dict = js.load(f)
     try:
         CouchToInstances(path,lga_dict,False)
         print("LGAs updated.")
@@ -112,7 +112,7 @@ def convert_to_geom(obj):
     if type(obj) == str:
         return GEOSGeometry(obj)
     coordinates = obj['geometry']
-    return GEOSGeometry(json.dumps(coordinates))
+    return GEOSGeometry(js.dumps(coordinates))
 def get_sentiment_rank(sentiment,count):
     average_sent = sentiment/count
     if average_sent <-0.5:
