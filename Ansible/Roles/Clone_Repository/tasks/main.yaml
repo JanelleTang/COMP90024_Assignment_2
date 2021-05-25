@@ -1,3 +1,20 @@
+                              
+# ============= COMP90024 - Assignment 2 ============= #
+#                               
+# The University of Melbourne           
+# Team 37
+#
+# ** Authors: **
+# 
+# JJ Burke              1048105
+# Janelle Tang          694209
+# Shuang Qiu            980433
+# Declan Baird-Watson   640975
+# Avinash Rao           1024577 
+# 
+# Location: Melbourne
+# ==================================================== 
+
 - name: copy github private key to the remote servers
   copy:
     src: "/Users/shuangqiu/Desktop/COMP90024_Assignment_2/Ansible/config/comp90024.pem"

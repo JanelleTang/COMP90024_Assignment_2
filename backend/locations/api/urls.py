@@ -6,26 +6,22 @@ from locations.api.views.tweet_views import *
 from locations.api.views.region_views import *
 
 urlpatterns = [
-    # path("regions/",
-    #     regionListCreateAPIView.as_view(),
-    #     name = "region-list"),
-        
-    # path("regions/<int:pk>/",
-    #     regionDetailAPIView.as_view(),
-    #     name = "region-detail"),
     url(r'^lga_data.geojson$', RegionGeoJSONAPIView.as_view(model=LGA,properties=['name',
+                                                                                'display_name',
                                                                                 'total_sentiment',
                                                                                 'sentiment_rank',
+                                                                                'sentiment_value',
                                                                                 'state',
                                                                                 'city',
-                                                                                'total_tweets']), name='data'),
+                                                                                'n_tweets']), name='data'),
     url(r'^city_data.geojson$', RegionGeoJSONAPIView.as_view(model=City,properties=['name',
                                                                             'total_sentiment',
+                                                                            'display_name',
                                                                             'sentiment_rank',
+                                                                            'sentiment_value',
                                                                             'state',
-                                                                            'total_tweets']), name='data'),
+                                                                            'n_tweets']), name='data'),
                                                                                 
-    # path('tweet/raw/',raw_tweets_api_view),
     path('tweet/raw/<int:size>', get_raw_tweet_by_size),
     path('tweet/raw/update/<str:pk>', update_raw_tweet),
     path('tweet/raw/delete/<str:pk>', delete_raw_tweet_by_id),
