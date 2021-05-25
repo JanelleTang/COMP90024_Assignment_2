@@ -20,7 +20,7 @@ export default {
       zoom: 9,
       center: [-37.8136,144.9631], 
       bounds: null,
-      django_geo: "http://172.26.128.53/api/data.geojson",
+      django_geo: "http://172.26.134.122/api/data.geojson",
       melb_geo: 'https://data.gov.au/geoserver/vic-local-government-areas-psma-administrative-boundaries/wfs?request=GetFeature&typeName=ckan_bdf92691_c6fe_42b9_a0e2_a4cd716fa811&outputFormat=json',
       APIData: []
     };
