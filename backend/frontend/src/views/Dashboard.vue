@@ -188,7 +188,6 @@ export default {
 				borderColor: 'blue',
 			}]
 		}
-		console.log(Object.values(this.tweetData).map((d) => {return d[1]['total_tweets']}))
 		// get the min and max values by geographic subdivision for each factor
 		var minMax = {
 			'renters' : this.extent(this.chartdata.map((d) => {return d[1].total_homes>0?d[1].renters/d[1].total_homes:null})),
@@ -211,8 +210,6 @@ export default {
 		}
 		// bar chart renders with x axis as all properties and y axis as 0 to 1 index
 		var barData = this.chartdata.filter((d) => {return d[0] == lga || lga == "all"})
-		console.log(barData)
-		console.log(minMax)
 		var barLabels = ['Renters','Owners','Being Purchased','Coal Miners','Gas Supply','Mining','Solar Panels','Solar Water Heaters',
 									'Income Over 3000','Income Under 1250','Age under 35','Multiculturalism Opinion','Homeless Rate','Aboriginal Origin',
 									'Pleasant COmmunity','Gaming Losses','Students']
@@ -244,7 +241,6 @@ export default {
 										'label' : (() => { return ''}),
 										'afterLabel' : ((item,data) => {
 											var labelData = data['datasets'][0]['data'][item['index']]
-											console.log(labelData);
 											var num = sum(labelData['data'].map((d) => {return d[1][labelData['num']]}))
 											var denom = sum(labelData['data'].map((d) => {return d[1][labelData['denom']]}))
 											return ['Avg: ' + Math.round(num/denom*100)/100,

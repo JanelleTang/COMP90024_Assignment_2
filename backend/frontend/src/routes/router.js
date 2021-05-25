@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/views/Home.vue'
 import Map from '@/views/Map.vue'
 import Dashboard from '@/views/Dashboard.vue'
+import WordCloud from '@/views/WordCloud.vue'
 import Navbar from "@/components/Navbar";
 Vue.use(Router)
 
@@ -29,12 +30,20 @@ export default new Router({
             }
         },
         {
-        path: '/dashboard',
-        name: 'Dashboard',
-        components: {
-            header: Navbar,
-            default: Dashboard,
-        }
+			path: '/dashboard',
+			name: 'Dashboard',
+			components: {
+				header: Navbar,
+				default: Dashboard,
+			}
         },
+		{
+			path: '/wordcloud',
+			name: 'WordCloud',
+			components: {
+				header: Navbar,
+				default: WordCloud
+			}
+		},
     ]
 })

@@ -10,7 +10,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "bootstrap-vue": "^2.21.2",
-    "chart.js": "^3.2.1",
+    "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
     "d3": "^6.7.0",
     "jquery": "^3.6.0",
@@ -23,7 +23,8 @@
     "vue-router": "^3.2.0",
     "vue2-google-maps": "^0.10.7",
     "vue2-leaflet": "^2.7.0",
-    "vuetify": "^2.4.11"
+    "vuetify": "^2.4.11",
+	"vuewordcloud": "^18.7.12"
   },
   "devDependencies": {
     "@mdi/font": "^5.9.55",

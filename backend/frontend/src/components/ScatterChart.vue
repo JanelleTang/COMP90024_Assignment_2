@@ -31,8 +31,8 @@
 		<option value="renters">Renter</option>
 		<option value="owned">Owner</option>
 		<option value="being_purchased">Being Purchased</option>
-		<option value="coal_miner">Coal Miner</option>
-		<option value="miner">Miner</option>
+		<option value="coal_miners">Coal Miner</option>
+		<option value="miners">Miner</option>
 		<option value="gas_supply">Gas Supply</option>
 		<option value="solar_panels">Solar Panels</option>
 		<option value="solar_water_heaters">Solar Water Heaters</option>
@@ -64,12 +64,9 @@ function tooltipText(d,xVar,yVar) {
 		var varsUsed = [xVar,yVar]
 		varArray.forEach((e) => {
 			returnArray.push(e+": "+Math.round(+d['data'][e]*100)/100)
-			console.log(e)
 			switch(e){
 			case 'renters': case 'owned': case 'being_purchased': case 'solar_panels': case 'solar_water_heaters':
-				console.log("test1")
 				if(!varsUsed.includes('total_homes')){
-					console.log("test 2")
 					returnArray.push("Total Homes: "+Math.round(+d['data']['total_homes']))
 					varsUsed.push('total_homes')
 				}
@@ -142,10 +139,8 @@ export default {
 			case 'sentiment_value':
 				return +d[v]/+d['n_tweets']
 			case 'tweets_per_pop':
-				console.log("tweets")
 				return +d['n_tweets']/+d['age_income_total']
 			default:
-				console.log("missed")
 				return +d[v]
 		}
 	},
@@ -168,7 +163,6 @@ export default {
 		},
 	runChart: function(lga) {
 	this.loaded = false
-	console.log(lga)
 	if(typeof(lga) == 'string') {
 		this.highlighted = lga
 	}

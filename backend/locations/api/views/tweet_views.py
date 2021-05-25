@@ -10,6 +10,7 @@ from django.views.decorators.http import require_http_methods
 import logging
 import ujson
 from couchdb import *
+import traceback
 
 logger = logging.getLogger('django.debug')
 
@@ -37,6 +38,23 @@ def create_raw_tweet(request):
         logger.info(e)
         resp = ResponseMessage(500, "saving tweets failed:\n"+str(e), None)
     return resp.response()
+
+def tweetHashtags(request):
+    resp = None
+    try:
+        twitter_db = couch_db.getDatabase("twitter")
+        tweet_data = twitter_db.view('tweet/hashtags', group=True,reduce=True)
+        hashtags = []
+        for row in tweet_data:
+            hashtags.append([row.key,row.value])
+        resp = ResponseMessage(200, "success", hashtags)
+    except Exception as e:
+        traceback.print_exc()
+        print(str(e))
+        resp = ResponseMessage(500,"Hashtags not found",None)
+    return resp.response()
+        
+        
 
 @require_http_methods(['POST'])
 def update_raw_tweet(request, pk=None):

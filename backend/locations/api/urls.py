@@ -30,6 +30,7 @@ urlpatterns = [
     path('tweet/raw/update/<str:pk>', update_raw_tweet),
     path('tweet/raw/delete/<str:pk>', delete_raw_tweet_by_id),
     path('tweet/raw/create', create_raw_tweet),
+    path('tweet/hashtags', tweetHashtags),
     path('location/dates',get_all_dates),
     path('location/dates/<str:pk>',get_city_dates),
     path('location/times',get_all_times),
