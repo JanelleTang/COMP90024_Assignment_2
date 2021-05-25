@@ -4,7 +4,7 @@ import requests
 import pandas as pd
 import django 
 from django.contrib.gis.geos import GEOSGeometry
-import json
+import json as js
 from django.core.exceptions import ObjectDoesNotExist
 import django
 import os
@@ -48,7 +48,7 @@ def update_lga_instances(requests):
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
     django.setup()
     with open('locations/data/shapefiles/combined_lga_data.json') as f:
-        lga_dict = json.load(f)
+        lga_dict = js.load(f)
     try:
         CouchToInstances(path,lga_dict,False)
         print("LGAs updated.")
@@ -59,10 +59,7 @@ def update_lga_instances(requests):
     return resp.response()
 ## ========================== Region Polygons ========================== #
 def CouchToInstances(path,geo_dict,isCity):
-    if isCity:
-        region_data = get_cities()['obj']
-    else:
-        region_data = get_lgas()['obj']
+    region_data = requests.get(path).json()['obj']
     update_model_data(region_data,geo_dict,isCity)
 def update_model_data(data,geom_dict,is_city=True):
     for row in data:
@@ -112,7 +109,7 @@ def convert_to_geom(obj):
     if type(obj) == str:
         return GEOSGeometry(obj)
     coordinates = obj['geometry']
-    return GEOSGeometry(json.dumps(coordinates))
+    return GEOSGeometry(js.dumps(coordinates))
 def get_sentiment_rank(sentiment,count):
     average_sent = sentiment/count
     if average_sent <-0.5:
