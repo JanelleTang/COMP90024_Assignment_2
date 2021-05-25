@@ -36,7 +36,13 @@
     dest: '/home/ubuntu/conf/nginx.conf'
     owner: ubuntu
     group: ubuntu
-
+- name: copy aurin.json to the dist
+  become: yes
+  template:
+    src: aurin.json.j2
+    dest: '/home/ubuntu/COMP90024/backend/frontend/dist/aurin.json'
+    owner: ubuntu
+    group: ubuntu
 - name: copy Nginx docker compose file to server
   become: yes
   template:
