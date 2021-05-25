@@ -31,7 +31,12 @@ def update_city_instances(requests):
         'hobart': 'POINT(147.3257 -42.8826)',
         'ballarat': 'POINT(143.8503 -37.5622)',
         'cairns':'POINT(145.7710 -16.9203)',
-        'newcastle': 'POINT(151.7817 -32.9283)'
+        'newcastle': 'POINT(151.7817 -32.9283)',
+        'albury': 'POINT(146.9095 -36.0751)',
+        'broome': 'POINT(122.2304 -17.9644)',
+        'launceston': 'POINT(147.1358 -41.4391)',
+        'bendigo': 'POINT(144.2794 -36.7570)',
+        'gold cost city': 'POINT(153.4000 -28.0167)'
     }
 
     try:
