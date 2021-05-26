@@ -18,6 +18,6 @@ https://youtu.be/uRQ-ZykvXbs<br/>
 https://youtu.be/yZzcxYgdb_o
 
 ### System Architecture
-![System Architecture Design[(https://github.com/JanelleTang/COMP90024_Assignment_2/blob/381fd444ad48d86a5e9c7034d795500e1d26f415/System%20Architecture%20image.png)
+![System Architecture Design](https://github.com/JanelleTang/COMP90024_Assignment_2/blob/381fd444ad48d86a5e9c7034d795500e1d26f415/System%20Architecture%20image.png)
 https://youtu.be/Q2IWcv9H46U
 
