@@ -1,6 +1,6 @@
 # COMP90024 Assignment 2 2021
 ### Team 37
-# Understanding attitude on climate change through demographics
+# Understanding attitudes on climate change through demographics
 
 Team Members:
 * Shuang Qiu - 980433
