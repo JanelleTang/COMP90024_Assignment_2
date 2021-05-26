@@ -13,8 +13,8 @@ Team Members:
 https://youtu.be/ldwQKv6J7F8
 
 ### Ansible Deployment
-https://youtu.be/yZzcxYgdb_o  
-https://youtu.be/uRQ-ZykvXbs
+https://youtu.be/yZzcxYgdb_o<br/>
+https://youtu.be/uRQ-ZykvXbs<br/>
 https://youtu.be/yZzcxYgdb_o
 
 ### System Architecture
