@@ -136,7 +136,7 @@ export default {
 	
 	this.loaded = false
 	// pull lga info and tweet data from apis and aurin data from static file
-	Promise.all([axios.get("api/location/lga"),axios.get("aurin.json"),
+	Promise.all([axios.get("api/location/lga"),require("@/assets/aurin.json"),
 				axios.get("api/location/dates")]).then((files) =>{
 		var chartdata = files[0]['data']['obj'].map((d) => {
 			var prop = Object.values(d)[0]
