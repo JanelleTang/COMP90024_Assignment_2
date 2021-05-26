@@ -3,11 +3,11 @@
 # Understanding attitude on climate change through demographics
 
 Team Members:
-* Shuang Qiu - 975781
-* Declan Baird-Watson - 945003
-* JJ Burke - 979895
-* Janelle Lin Tang - 930614
-* Avinash Rao - 961717
+* Shuang Qiu - 980433
+* Declan Baird-Watson - 640975
+* JJ Burke - 1048105
+* Janelle Lin Tang - 694209
+* Avinash Rao - 694209
 
 ### Frontend Tour
 https://youtu.be/ldwQKv6J7F8
