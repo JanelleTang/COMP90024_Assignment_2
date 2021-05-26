@@ -12,6 +12,8 @@ Team Members:
 ### Frontend Tour
 https://youtu.be/ldwQKv6J7F8
 
+The webpage can be visited at http://172.26.134.122/ with a Unimelb VPN.
+
 ### Ansible Deployment
 https://youtu.be/yZzcxYgdb_o<br/>
 https://youtu.be/uRQ-ZykvXbs<br/>
