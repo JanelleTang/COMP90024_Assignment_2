@@ -1,5 +1,19 @@
-# # from django.shortcuts import render
-# from numpy.lib.function_base import average
+# ============= COMP90024 - Assignment 2 ============= #
+#                               
+# The University of Melbourne           
+# Team 37
+#
+# ** Authors: **
+# 
+# JJ Burke              1048105
+# Janelle Tang          694209
+# Shuang Qiu            980433
+# Declan Baird-Watson   640975
+# Avinash Rao           1024577 
+# 
+# Location: Melbourne
+# ==================================================== 
+
 import requests
 import pandas as pd
 import django 

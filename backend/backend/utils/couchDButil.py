@@ -1,3 +1,20 @@
+# ============= COMP90024 - Assignment 2 ============= #
+#                               
+# The University of Melbourne           
+# Team 37
+#
+# ** Authors: **
+# 
+# JJ Burke              1048105
+# Janelle Tang          694209
+# Shuang Qiu            980433
+# Declan Baird-Watson   640975
+# Avinash Rao           1024577 
+# 
+# Location: Melbourne
+# ==================================================== 
+
+
 '''
 Create Couch DB database util according to this API
 https://couchdb-python.readthedocs.io/en/latest/client.html
