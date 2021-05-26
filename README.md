@@ -1,26 +1,22 @@
-# COMP90024_Assignment2
+# COMP90024 Assignment 2 2021
+### Team 37
+# Understanding attitude on climate change through demographics
 
-## Frontend Vue.js setup
+Team Members:
+* [Shuang Qiu - 975781]
+* [Declan Baird-Watson - 945003]
+* [JJ Burke - 979895]
+* [Janelle Lin Tang - 930614]
+* [Avinash Rao - 961717]
 
-### Install relevant modules
+### Frontend Tour
+https://youtu.be/ldwQKv6J7F8
 
-```bash
-npm install
-```
+### Ansible Deployment
+https://youtu.be/yZzcxYgdb_o  
+https://youtu.be/uRQ-ZykvXbs
+https://youtu.be/yZzcxYgdb_o
 
-### Development
-
-At development mode, Vue.js will start a server at port 8080 by default
-
-```bash
-npm run serve
-```
-
-### Deployment
-
-Vue will be using Webpack to compile the frontend file into static files
-
-```bash
-npm run build
-```
+### System Architecture
+https://youtu.be/Q2IWcv9H46U
 
