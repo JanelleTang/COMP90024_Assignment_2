@@ -7,7 +7,7 @@ Team Members:
 * Declan Baird-Watson - 640975
 * JJ Burke - 1048105
 * Janelle Lin Tang - 694209
-* Avinash Rao - 694209
+* Avinash Rao - 1024577
 
 ### Frontend Tour
 https://youtu.be/ldwQKv6J7F8
